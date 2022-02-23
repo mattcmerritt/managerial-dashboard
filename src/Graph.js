@@ -1,6 +1,6 @@
 const Graph = (props) => {
     return (
-        <iframe id="igraph" scrolling="no" style={{border:'none'}} seamless="seamless" src={props.link} height={props.h} width={props.w}></iframe>
+        <iframe id="igraph" scrolling="no" style={{border:'none'}} seamless="seamless" src={props.link} height='525' width='30%'></iframe>
     );
 }
 
