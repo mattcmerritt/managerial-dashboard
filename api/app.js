@@ -39,8 +39,7 @@ var fileStorageEngine = multer.diskStorage({
 
 var upload = multer({storage: fileStorageEngine });
 
-app.post('/upload', upload.single('file'), (req, res) => {
-  console.log(req.file);
+app.post('/upload', upload.array('file'), (req, res) => {
   res.send('File upload successful');
 });
 // end file input

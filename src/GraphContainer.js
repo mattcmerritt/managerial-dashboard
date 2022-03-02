@@ -7,8 +7,8 @@ const GraphContainer = (props) => {
             <h1>{props.groupName}</h1>
             <div className="content">
                 {
-                    props.links.map((currentLink) => {
-                        return <Graph link={currentLink}/>
+                    props.data.map((currentData) => {
+                        return <Graph data={currentData}/>
                     })
                 }
             </div>
