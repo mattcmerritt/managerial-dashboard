@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './Navbar';
 import FileUploader from "./FileUploader";
 import GraphContainer from './GraphContainer';
+import RecWindow from "./RecWindow";
 
 class App extends Component {
 
@@ -46,19 +47,19 @@ class App extends Component {
         {
           link: 'https://mikepmerritt.github.io/DashboardTesting/pie_chart.html',
           group: 'patient',
-          hasRec: false,
+          hasRec: true,
           rec: "Nothing to add."
         },
         {
           link: 'https://mikepmerritt.github.io/DashboardTesting/pie_chart_actionable.html',
           group: 'patient',
-          hasRec: false,
+          hasRec: true,
           rec: "Nothing to add."
         },
         {
           link: 'https://mikepmerritt.github.io/DashboardTesting/pillar_chart.html',
           group: 'patient',
-          hasRec: false,
+          hasRec: true,
           rec: "Nothing to add."
         },
         {
@@ -108,6 +109,8 @@ class App extends Component {
 
         <GraphContainer groupName={"Patient Data"} data={patientData} />
         <GraphContainer groupName={"Staff Data"} data={staffData} />
+
+        <RecWindow />
 
         <p className="App-intro">{this.state.apiResponse}</p>
       </div>
