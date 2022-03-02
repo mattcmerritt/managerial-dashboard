@@ -48,19 +48,19 @@ class App extends Component {
           link: 'https://mikepmerritt.github.io/DashboardTesting/pie_chart.html',
           group: 'patient',
           hasRec: true,
-          rec: "Nothing to add."
+          rec: "This is the recommendation for graph 1."
         },
         {
           link: 'https://mikepmerritt.github.io/DashboardTesting/pie_chart_actionable.html',
           group: 'patient',
           hasRec: true,
-          rec: "Nothing to add."
+          rec: "This is the recommendation for graph 2. We have a lot to say here to make sure that the box can display all of this text. If it does not fit, it will be a problem. This is the recommendation for graph 2. We have a lot to say here to make sure that the box can display all of this text. If it does not fit, it will be a problem. This is the recommendation for graph 2. We have a lot to say here to make sure that the box can display all of this text. If it does not fit, it will be a problem."
         },
         {
           link: 'https://mikepmerritt.github.io/DashboardTesting/pillar_chart.html',
           group: 'patient',
-          hasRec: true,
-          rec: "Nothing to add."
+          hasRec: false,
+          rec: "This is the recommendation for graph 3."
         },
         {
           link: 'https://mikepmerritt.github.io/DashboardTesting/staff_highest_room.html',

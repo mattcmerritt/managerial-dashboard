@@ -5,7 +5,7 @@ const RecWindow = (props) => {
                 const win = document.getElementById("recWindow");
                 win.style = "display: none;";
             }}>Close</button>
-            <p>Not much to add yet.</p>
+            <p id="recText">Nothing has been loaded to display.</p>
         </div>
     );
 }
