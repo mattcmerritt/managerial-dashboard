@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import FileUploader from "./FileUploader";
 import GraphContainer from './GraphContainer';
 import RecWindow from "./RecWindow";
+import ProcessFlowGraph from "./ProcessFlowGraph";
 
 class App extends Component {
 
@@ -113,6 +114,8 @@ class App extends Component {
         <RecWindow />
 
         <p className="App-intro">{this.state.apiResponse}</p>
+
+        <ProcessFlowGraph />
       </div>
     );
   }
