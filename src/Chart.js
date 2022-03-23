@@ -42,12 +42,12 @@ const Chart = (props) => {
         careMeanSum = Math.round(careMeanSum * 100)/100;
 
         // calculate percent each wait makes of all waiting, also round means now that we're done working with them
-        for(let wait of waitMeans) {
+        for(let i = 0; i < waitMeans.length; i++) {
             // calculate percents
-            let percent = (wait/waitMeanSum)*100;
+            let percent = (waitMeans[i]/waitMeanSum)*100;
             waitMeanPercents.push(Math.round(percent * 100)/100);
             // round means
-            wait = Math.round(wait * 100)/100;
+            waitMeans[i] = Math.round(waitMeans[i] * 100)/100;
         }
 
         // -----------------------------------
@@ -124,12 +124,12 @@ const Chart = (props) => {
         }
 
         // calculate mean percents, also round means now that we're done working with them
-        for(let mean of means) {
+        for(let i = 0; i < means.length; i++) {
             // calculate percents
-            let percent = (mean/meanSum)*100;
+            let percent = (means[i]/meanSum)*100;
             meanPercents.push(Math.round(percent * 100)/100);
             // round means
-            mean = Math.round(mean * 100)/100;
+            means[i] = Math.round(means[i] * 100)/100;
         }
 
         // -----------------------------------
@@ -138,11 +138,10 @@ const Chart = (props) => {
             for(let i = 0; i < rooms.length; i++) {
                 data.push({
                     type: 'bar',
-                    title: "Mean Times by Room (mins)",
                     x: [""],
                     y: [means[i]],
-                    labels: [rooms[i]],
-                    hovertemplate: "Room: %{label} <br>Mean Time (mins): %{y}",
+                    name: rooms[i],
+                    hovertemplate: "Room: " + rooms[i] + "<br>Mean Time (mins): %{y}",
                     width: 0.1
                 });
             }
@@ -150,7 +149,18 @@ const Chart = (props) => {
             layout.barmode = "stack";
         }
         else if (props.fields === "stackedmeanpercents") {
+            for(let i = 0; i < rooms.length; i++) {
+                data.push({
+                    type: 'bar',
+                    x: [""],
+                    y: [meanPercents[i]],
+                    name: rooms[i],
+                    hovertemplate: "Room: " + rooms[i] + "<br>Mean Time (%): %{y}%",
+                    width: 0.1
+                });
+            }
 
+            layout.barmode = "stack";
         }
         else if (props.fields === "rooms") {
             var meanTrace = {

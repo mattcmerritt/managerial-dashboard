@@ -252,6 +252,7 @@ const DataInput = () => {
             <Chart chartType="pie" fields="action"/>,
             <Chart chartType="pillar" fields="rooms"/>,
             <Chart chartType="pillar" fields="stackedmeans"/>,
+            <Chart chartType="pillar" fields="stackedmeanpercents"/>,
         ];
 
         let parentChartDiv;
