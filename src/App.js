@@ -5,6 +5,7 @@ import FileUploader from "./FileUploader";
 import GraphContainer from './GraphContainer';
 import RecWindow from "./RecWindow";
 import ProcessFlowGraph from "./ProcessFlowGraph";
+import PieCharts from "./PieCharts";
 
 class App extends Component {
 
@@ -116,6 +117,8 @@ class App extends Component {
         <p className="App-intro">{this.state.apiResponse}</p>
 
         <ProcessFlowGraph />
+
+        <PieCharts />
       </div>
     );
   }
