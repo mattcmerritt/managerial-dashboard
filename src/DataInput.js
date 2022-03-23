@@ -64,10 +64,13 @@ const DataInput = () => {
             // making changes to the div once it is loaded
             dataImportDiv.style.display = "block";
 
+            const buttonList = document.createElement("ul");
+            buttonList.id = "typeList";
+            buttonList.style = "list-style: none";
+
             for (let list of dataset) {
                 // building out the checkboxes
-                const item = document.createElement("div");
-                item.className = "checkboxItem";
+                const item = document.createElement("li");
 
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
@@ -77,11 +80,36 @@ const DataInput = () => {
                 label.for = list.name;
                 label.innerHTML = `${list.name} (${list.data.length} items)`;
 
-                // putting the components into a div and storing that div in the dataImportDiv
+                // putting the components into a list item and adding that item to the list
                 item.appendChild(checkbox);
                 item.appendChild(label);
-                dataImportDiv.appendChild(item);
+                buttonList.appendChild(item);
             }
+            // putting the list into the div
+            dataImportDiv.appendChild(buttonList);
+
+            // creating a visualize button that will create the graphs
+            const visualizeBtn = document.createElement("button");
+            visualizeBtn.onclick = () => {
+                // reading checkmarks and saving as property
+                for (let list of dataset) {
+                    const currentBox = document.querySelector(`#typeList input[id="${list.name}"]`);
+                    list.type = currentBox.checked ? "care" : "wait";
+                }
+
+                // saving the dataset to storage
+                sessionStorage.setItem("dataset", JSON.stringify(dataset));
+
+                // can access the dataset like this:
+                console.log(JSON.parse(sessionStorage.getItem("dataset")));
+
+                // code to create the graphs would go here
+                // also add code to hide this div
+                console.log("Creating graphs!");
+            };
+            visualizeBtn.innerHTML = "Create Visualizations";
+
+            dataImportDiv.appendChild(visualizeBtn);
         });
     }
 
@@ -107,7 +135,7 @@ const DataInput = () => {
             <input type="file" id="dataInForm" onChange={ProcessDataset}></input>
             <div className="dataInSettings" id="dataInSettings" style={{display: "none"}}>
                 <p>
-                    Data was successfully loaded!
+                    Data was successfully loaded! Check which steps involve waiting, and leave all care steps unchecked.
                 </p>
             </div>
         </div>
