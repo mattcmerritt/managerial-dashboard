@@ -166,7 +166,7 @@ const Chart = (props) => {
         layout.width = 500;
     }
 
-    /*
+    
     // this is the proper return
     return (
         <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
@@ -181,7 +181,7 @@ const Chart = (props) => {
             />
         </div>
     );
-    */
+    
 
     // this is the debug return for wait+care pie
     /*
@@ -236,6 +236,7 @@ const Chart = (props) => {
     */
 
     // this is the debug return for rooms pillar
+    /*
     return (
         <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
             <Plot 
@@ -272,6 +273,7 @@ const Chart = (props) => {
             />
         </div>
     );
+    */
 }
 
 export default Chart;
