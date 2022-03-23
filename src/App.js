@@ -5,7 +5,7 @@ import FileUploader from "./FileUploader";
 import GraphContainer from './GraphContainer';
 import RecWindow from "./RecWindow";
 import ProcessFlowGraph from "./ProcessFlowGraph";
-import PieCharts from "./PieCharts";
+import Chart from "./Chart";
 import DataInput from "./DataInput";
 
 class App extends Component {

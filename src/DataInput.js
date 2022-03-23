@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PieCharts from "./PieCharts";
+import Chart from "./Chart";
 
 const DataInput = () => {
     let XLSX = require("xlsx");
