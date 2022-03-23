@@ -2,7 +2,7 @@ import Plot from 'react-plotly.js';
 
 const Chart = (props) => {
 
-    let data = {};
+    let data = [];
     let layout = {};
 
     // read in data from excel
@@ -55,19 +55,23 @@ const Chart = (props) => {
 
         if (props.fields === "wait+care") {
             // to my knowledge, this one works
-            data.type = 'pie';
-            data.labels = ['Wait Time', 'Care Time'];
-            data.values = [waitMeanSum, careMeanSum];
-            data.text = ['Mean Wait Time', 'Mean Care Time'];
-            data.hovertemplate = "%{label}: <br>Mean Total Time (mins): %{value}";
+            data.push({
+                type: 'pie',
+                labels: ['Wait Time', 'Care Time'],
+                values: [waitMeanSum, careMeanSum],
+                text: ['Mean Wait Time', 'Mean Care Time'],
+                hovertemplate: "%{label}: <br>Mean Total Time (mins): %{value}"
+            });  
         }
         else if (props.fields === "action") {
             // should work too
-            data.type = 'pie';
-            data.labels = waitNames;
-            data.values = waitMeans;
-            data.text = waitNames;
-            data.hovertemplate = "Room: %{label} <br>Mean Time (mins): %{value}";
+            data.push({
+                type: 'pie',
+                labels: waitNames,
+                values: waitMeans,
+                text: waitNames,
+                hovertemplate: "Room: %{label} <br>Mean Time (mins): %{value}"
+            })
         }
 
         // customize layout for pie charts
@@ -131,7 +135,14 @@ const Chart = (props) => {
         // -----------------------------------
         // Pick type of pillar chart
         if (props.fields === "stackedmeans") {
-
+            data.push({
+                type: 'bar',
+                title: "Mean Times by Room (mins)",
+                x: [],
+                y: means,
+                labels: rooms,
+                hovertemplate: "Room: %{label} <br>Mean Time (mins): %{y}"
+            })
         }
         else if (props.fields === "stackedmeanpercents") {
 
@@ -156,7 +167,10 @@ const Chart = (props) => {
                 type: "bar"
             };
             
-            data = [meanTrace, stdvTrace, rangeTrace];
+            data.push(meanTrace);
+            data.push(stdvTrace);
+            data.push(rangeTrace);
+            //data = [meanTrace, stdvTrace, rangeTrace];
 
             layout.barmode = "group";
         }
@@ -181,7 +195,6 @@ const Chart = (props) => {
             />
         </div>
     );
-    
 
     // this is the debug return for wait+care pie
     /*
@@ -221,6 +234,34 @@ const Chart = (props) => {
                     values: [40, 50, 60],
                     text: ["Wait 1", "Wait 2", "Wait 3"],
                     hovertemplate: "Room: %{label} <br>Mean Time (mins): %{value}"
+                }]
+            }
+
+            layout = {
+                {
+                    height: 400,
+                    width: 500
+                }
+            }
+            />
+        </div>
+    );
+    */
+
+    // this is the debug return for stackedmeans
+    // this does not work
+    /*
+    return (
+        <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
+            <Plot 
+            data = {
+                [{
+                    type: 'bar',
+                    title: "Mean Times by Room (mins)",
+                    x: [],
+                    y: [10, 20, 30, 40, 50, 60],
+                    labels: ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5", "Room 6"],
+                    hovertemplate: "Room: %{label} <br>Mean Time (mins): %{y}"
                 }]
             }
 
