@@ -11,54 +11,9 @@ const PieCharts = (props) => {
     let waitSum = 0;
     let careSum = 0;
 
-    const ExtractData = (workbook) => {
-        
-        //let workbook = XLSX.readFile(filepath);
-        //let table = XLSX.utils.sheet_to_json(workbook)
-        let worksheet = workbook.Sheets[workbook.SheetNames[0]]; // first sheet in workbook
-        var range = XLSX.utils.decode_range(worksheet['!ref']); // range of sheet
+    const CreatePieCharts = () => {
 
-        let colLetter = 'A';
-        const starterLetterValue = colLetter.charCodeAt(0);
-        let colLetterValue = starterLetterValue;
-        
-        let dataset = [];
-
-        // https://www.npmjs.com/package/xlsx#working-with-the-workbook
-        // ignore column 1 (Patient ID) for now
-        for(let currCol = 0; currCol <= range.e.c; currCol++) {
-            // first cell in a column is the name, so fetch that separately
-            let nameCell = worksheet[colLetter + 1];
-            let name = (nameCell ? nameCell.v : undefined);
-            //console.log(name);
-
-            // rest of the cells are values, so fetch and add to an array
-            const dataArray = [];
-            for(let currRow = 1; currRow < range.e.r; currRow++) {
-                let dataCellAddress = colLetter + (currRow + 1);
-                let dataCell = worksheet[dataCellAddress];
-                let dataValue = (dataCell ? dataCell.v : undefined);
-                dataArray.push(dataValue);
-            }
-            //console.log(dataArray);
-
-            dataset.push(
-                {
-                    name: name,
-                    data: dataArray,
-                }
-            );
-
-            colLetterValue++;
-            colLetter = String.fromCharCode(colLetterValue);
-        }
-
-        //console.log(dataset);
-        return dataset;
-
-    }
-
-    const CreatePieCharts = (processedData) => {
+        let processedData = JSON.parse(sessionStorage.getItem("dataset"));
 
         processedData.shift(); // remove the first element - the Patient ID field
 
@@ -100,14 +55,7 @@ const PieCharts = (props) => {
         // );
     }
 
-    // reading file from the pages input form
-    async function handleFileAsync(e) {
-        const file = e.target.files[0];
-        const data = await file.arrayBuffer();
-        const workbook = XLSX.read(data);
-
-        CreatePieCharts(ExtractData(workbook));
-    }
+    CreatePieCharts();
 
     return (
         <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
@@ -128,7 +76,6 @@ const PieCharts = (props) => {
                 }
             }
             />
-            <input type="file" id="pfInput" onChange={handleFileAsync}></input>
         </div>
     );
 }

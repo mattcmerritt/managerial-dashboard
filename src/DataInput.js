@@ -1,3 +1,6 @@
+import React, { Component } from "react";
+import PieCharts from "./PieCharts";
+
 const DataInput = () => {
     let XLSX = require("xlsx");
 
@@ -106,6 +109,13 @@ const DataInput = () => {
                 // code to create the graphs would go here
                 // also add code to hide this div
                 console.log("Creating graphs!");
+                const pie = React.createElement(PieCharts);
+                const chart = document.createElement("div");
+                chart.innerHTML = pie;
+                
+                const appDiv = document.querySelector("div.App");
+                appDiv.appendChild(chart);
+                
             };
             visualizeBtn.innerHTML = "Create Visualizations";
 
