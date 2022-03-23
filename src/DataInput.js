@@ -168,6 +168,7 @@ const DataInput = () => {
                     const currentBox = document.querySelector(`#fieldList input[id="${dataset[i].name}"]`);
                     if (!currentBox.checked) {
                         dataset.splice(i, 1); // remove list from dataset
+                        i--;
                     }
                 }
 
@@ -248,11 +249,11 @@ const DataInput = () => {
         console.log("Creating graphs");
 
         const charts = [
-            <Chart chartType="pie" fields="wait+care"/>,
-            <Chart chartType="pie" fields="action"/>,
-            <Chart chartType="pillar" fields="rooms"/>,
-            <Chart chartType="pillar" fields="stackedmeans"/>,
-            <Chart chartType="pillar" fields="stackedmeanpercents"/>,
+            <Chart chartType="pie" fields="wait+care" rec="Recommendation from chart 1." id="pie1"/>,
+            <Chart chartType="pie" fields="action" rec="Recommendation from chart 2." id="pie2"/>,
+            <Chart chartType="pillar" fields="rooms" rec="Recommendation from chart 3." id="pillar1"/>,
+            <Chart chartType="pillar" fields="stackedmeans" rec="Recommendation from chart 4." id="pillar2"/>,
+            <Chart chartType="pillar" fields="stackedmeanpercents" rec="Recommendation from chart 5." id="pillar3"/>,
         ];
 
         let parentChartDiv;
