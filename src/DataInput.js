@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import ReactDOM from 'react-dom';
 import Chart from "./Chart";
 
@@ -137,13 +136,13 @@ const DataInput = () => {
 
                     const parentBox = document.querySelector(`#outerList input[id="allFields"]`);
                     if (newState) {
-                        if (boxesChecked == 0) {
+                        if (boxesChecked === 0) {
                             // change parent to indeterminate
                             parentBox.checked = false;
                             parentBox.indeterminate = true;
                         }
                         boxesChecked++;
-                        if (boxesChecked == dataset.length) {
+                        if (boxesChecked === dataset.length) {
                             // check parent
                             parentBox.indeterminate = false;
                             parentBox.checked = true;
@@ -152,7 +151,7 @@ const DataInput = () => {
                         boxesChecked--;
                         parentBox.indeterminate = true;
                         parentBox.checked = false;
-                        if (boxesChecked == 0) {
+                        if (boxesChecked === 0) {
                             // uncheck parent
                             parentBox.indeterminate = false;
                             parentBox.checked = false;
@@ -248,11 +247,6 @@ const DataInput = () => {
     const CreateVisualizations = async () => {
         console.log("Creating graphs");
 
-        const pie = <Chart chartType="pie" fields="wait+care"/>;
-        const pie2 = <Chart chartType="pie" fields="action"/>;
-        const pillar = <Chart chartType="pillar" fields="rooms"/>;
-        const stack1 = <Chart chartType="pillar" fields="stackedmeans"/>;
-
         const charts = [
             <Chart chartType="pie" fields="wait+care"/>,
             <Chart chartType="pie" fields="action"/>,
@@ -267,12 +261,14 @@ const DataInput = () => {
             resolve();
         });
 
-        for (let chart of charts) {
-            let chartDiv = document.createElement("div");
-            parentChartDiv.appendChild(chartDiv);
-
-            ReactDOM.render(chart, chartDiv);
-        }        
+        getParentChartDiv.then(() => {
+            for (let chart of charts) {
+                let chartDiv = document.createElement("div");
+                parentChartDiv.appendChild(chartDiv);
+    
+                ReactDOM.render(chart, chartDiv);
+            }
+        });        
     }
 
     const ProcessDataset = async (e) => {

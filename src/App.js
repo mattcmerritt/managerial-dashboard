@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import './App.css';
 import Navbar from './Navbar';
-import FileUploader from "./FileUploader";
-import GraphContainer from './GraphContainer';
-import RecWindow from "./RecWindow";
-import ProcessFlowGraph from "./ProcessFlowGraph";
-import Chart from "./Chart";
 import DataInput from "./DataInput";
 
 class App extends Component {
