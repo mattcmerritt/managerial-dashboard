@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import Chart from "./Chart";
 
 const DataInput = () => {
@@ -256,6 +257,14 @@ const DataInput = () => {
         sessionStorage.setItem("graphsReady", true);
 
         // force a rerender
+        let chartDiv;
+        const getChartDiv = new Promise((resolve, reject) => {
+            chartDiv = document.getElementById("chartsDiv");
+
+            resolve();
+        });
+
+        getChartDiv.then(() => ReactDOM.render(pie, chartDiv));
         
     }
 

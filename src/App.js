@@ -136,7 +136,7 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <DataInput />
-        {this.state.hasData ? JSON.parse(sessionStorage.getItem("graph")).element : null}
+        <div className="charts" id="chartsDiv"></div>
       </div>
     )
   }
