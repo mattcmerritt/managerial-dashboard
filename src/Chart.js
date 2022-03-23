@@ -208,6 +208,10 @@ const Chart = (props) => {
     // this is the proper return
     return (
         <div className="graphWindow" id={props.id}>
+            <Plot data = {data}
+
+            layout = {layout}
+            />
             <button 
             onClick={() => {
                 let text = document.querySelector(`#${props.id} p`);
@@ -216,10 +220,6 @@ const Chart = (props) => {
                 Show Recommendation
             </button>
             <p id="recText" style={{display: "none"}}>{props.rec}</p>
-            <Plot data = {data}
-
-            layout = {layout}
-            />
         </div>
     );
 
