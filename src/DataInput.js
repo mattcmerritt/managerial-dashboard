@@ -251,11 +251,13 @@ const DataInput = () => {
         const pie = <Chart chartType="pie" fields="wait+care"/>;
         const pie2 = <Chart chartType="pie" fields="action"/>;
         const pillar = <Chart chartType="pillar" fields="rooms"/>;
+        const stack1 = <Chart chartType="pillar" fields="stackedmeans"/>;
 
         const charts = [
             <Chart chartType="pie" fields="wait+care"/>,
             <Chart chartType="pie" fields="action"/>,
             <Chart chartType="pillar" fields="rooms"/>,
+            <Chart chartType="pillar" fields="stackedmeans"/>,
         ];
 
         let parentChartDiv;

@@ -135,14 +135,19 @@ const Chart = (props) => {
         // -----------------------------------
         // Pick type of pillar chart
         if (props.fields === "stackedmeans") {
-            data.push({
-                type: 'bar',
-                title: "Mean Times by Room (mins)",
-                x: [],
-                y: means,
-                labels: rooms,
-                hovertemplate: "Room: %{label} <br>Mean Time (mins): %{y}"
-            })
+            for(let i = 0; i < rooms.length; i++) {
+                data.push({
+                    type: 'bar',
+                    title: "Mean Times by Room (mins)",
+                    x: [""],
+                    y: [means[i]],
+                    labels: [rooms[i]],
+                    hovertemplate: "Room: %{label} <br>Mean Time (mins): %{y}",
+                    width: 0.1
+                });
+            }
+
+            layout.barmode = "stack";
         }
         else if (props.fields === "stackedmeanpercents") {
 
@@ -186,12 +191,7 @@ const Chart = (props) => {
         <div className="graphWindow" style={{display: "inline-block"}}>
             <Plot data = {data}
 
-            layout = {
-                {
-                    height: 400,
-                    width: 500
-                }
-            }
+            layout = {layout}
             />
         </div>
     );
