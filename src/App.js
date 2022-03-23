@@ -126,11 +126,6 @@ class App extends Component {
   }
   */
 
-  constructor(props) {
-    super(props);
-    this.state = { hasData: false };
-  }
-
   render() {
     return (
       <div className="App">

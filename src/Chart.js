@@ -169,7 +169,7 @@ const Chart = (props) => {
     
     // this is the proper return
     return (
-        <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
+        <div className="graphWindow" style={{display: "inline-block"}}>
             <Plot data = {data}
 
             layout = {

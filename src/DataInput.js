@@ -231,8 +231,12 @@ const DataInput = () => {
 
                     // code to create the graphs would go here
                     // also add code to hide this div
-                    console.log("Creating graphs!");
                     CreateVisualizations();
+
+                    // removing the data input elements
+                    const appDiv = document.getElementsByClassName("App")[0];
+                    const dataIn = document.getElementsByClassName("dataIn")[0];
+                    appDiv.removeChild(dataIn);
                 };
                 visualizeBtn.innerHTML = "Create Visualizations";
 
