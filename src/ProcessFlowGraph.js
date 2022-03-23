@@ -1,5 +1,8 @@
 const ProcessFlowGraph = (props) => {
     var XLSX = require("xlsx");
+    // WebAssembly.instantiateStreaming(fetch('@hpcc-js/wasm/dist/graphvizlib.wasm'), importObject)
+    // .then(results => {});
+
     var hpccWasm = require("@hpcc-js/wasm/dist/index.min.js");
 
     const ExtractData = (workbook) => {

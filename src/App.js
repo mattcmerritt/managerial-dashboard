@@ -6,9 +6,11 @@ import GraphContainer from './GraphContainer';
 import RecWindow from "./RecWindow";
 import ProcessFlowGraph from "./ProcessFlowGraph";
 import PieCharts from "./PieCharts";
+import DataInput from "./DataInput";
 
 class App extends Component {
 
+  /*
   constructor(props) {
     super(props);
     this.state = { apiResponse: "" };
@@ -122,6 +124,17 @@ class App extends Component {
       </div>
     );
   }
+  */
+
+  render() {
+    return (
+      <div className="App">
+        <Navbar />
+        <DataInput />
+      </div>
+    )
+  }
+
 }
 
 export default App;
