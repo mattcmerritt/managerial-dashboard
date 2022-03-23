@@ -63,6 +63,25 @@ const DataInput = () => {
         waitForDOM.then(() => {
             // making changes to the div once it is loaded
             dataImportDiv.style.display = "block";
+
+            for (let list of dataset) {
+                // building out the checkboxes
+                const item = document.createElement("div");
+                item.className = "checkboxItem";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = list.name;
+
+                const label = document.createElement("label");
+                label.for = list.name;
+                label.innerHTML = `${list.name} (${list.data.length} items)`;
+
+                // putting the components into a div and storing that div in the dataImportDiv
+                item.appendChild(checkbox);
+                item.appendChild(label);
+                dataImportDiv.appendChild(item);
+            }
         });
     }
 
