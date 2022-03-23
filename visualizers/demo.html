@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Process Flow</title>
+    <script type="module" src="http://localhost:8000/node_modules/xlsx/xlsx.js"></script>
+    <script type="module" src="http://localhost:8000/node_modules/@hpcc-js/wasm/dist/index.js"></script>
+    <script type="text/javascript" src="process-flow.js"></script>
+</head>
+<body>
+    <div id="placeholder"></div>
+    <script type="text/javascript">CreateProcessFlow(ExtractData("visualizers/mock_data.xlsx"));</script>
+</body>
+
+</html>
