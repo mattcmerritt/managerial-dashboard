@@ -248,8 +248,11 @@ const DataInput = () => {
     const CreateVisualizations = async () => {
         console.log("Creating graphs");
 
-        const pie = <Chart type="pie" fieldList="wait+care"/>;
+        const pie = <Chart chartType="pie" fields="wait+care"/>;
+        const pie2 = <Chart chartType="pie" fields="action"/>;
+        const pillar = <Chart chartType="pillar" fields="rooms"/>;
 
+        /*
         const graphData = [{
             element: pie,
             hasRec: true,
@@ -259,6 +262,7 @@ const DataInput = () => {
         // can access the dataset like this:
         sessionStorage.setItem("graphs", JSON.stringify(graphData));
         sessionStorage.setItem("graphsReady", true);
+        */
 
         // force a rerender
         let chartDiv;
@@ -269,6 +273,8 @@ const DataInput = () => {
         });
 
         getChartDiv.then(() => ReactDOM.render(pie, chartDiv));
+        getChartDiv.then(() => ReactDOM.render(pie2, chartDiv));
+        getChartDiv.then(() => ReactDOM.render(pillar, chartDiv));
         
     }
 
