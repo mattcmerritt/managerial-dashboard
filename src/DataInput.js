@@ -67,10 +67,30 @@ const DataInput = () => {
             // making changes to the div once it is loaded
             dataImportDiv.style.display = "block";
 
-            const buttonList = document.createElement("ul");
-            buttonList.id = "typeList";
-            buttonList.style = "list-style: none";
+            // step 1: remove unecessary columns from the dataset
+            const fieldList = document.createElement("ul");
+            fieldList.id = "outerList";
+            fieldList.style = "list-style: none";
 
+            // creating a parent checkbox to mark all as checked
+            const allFields = document.createElement("li");
+            const allCheckbox = document.createElement("input");
+            allCheckbox.type = "checkbox";
+            allCheckbox.id = "allFields";
+
+            const allLabel = document.createElement("label");
+            allLabel.for = "allFields";
+            allLabel.innerHTML = "Fields Found:";
+
+            allFields.appendChild(allCheckbox);
+            allFields.appendChild(allLabel);
+            fieldList.appendChild(allFields);
+
+            // creating an inner list to have the child checkboxes
+            const innerList = document.createElement("ul");
+            innerList.id = "fieldList";
+            innerList.style = "list-style: none";
+            
             for (let list of dataset) {
                 // building out the checkboxes
                 const item = document.createElement("li");
@@ -81,45 +101,141 @@ const DataInput = () => {
 
                 const label = document.createElement("label");
                 label.for = list.name;
-                label.innerHTML = `${list.name} (${list.data.length} items)`;
+                label.innerHTML = `${list.name} (${list.data.length} data points)`;
 
                 // putting the components into a list item and adding that item to the list
                 item.appendChild(checkbox);
                 item.appendChild(label);
-                buttonList.appendChild(item);
+                innerList.appendChild(item);
             }
-            // putting the list into the div
-            dataImportDiv.appendChild(buttonList);
 
-            // creating a visualize button that will create the graphs
-            const visualizeBtn = document.createElement("button");
-            visualizeBtn.onclick = () => {
-                // reading checkmarks and saving as property
+            // putting the lists into the div
+            fieldList.appendChild(innerList);
+            dataImportDiv.appendChild(fieldList);
+
+            let boxesChecked = 0; // number of boxes checked
+
+            // making the parent checkbox check all of the child checkboxes
+            allCheckbox.addEventListener("click", (e) => {
+                const newState = document.querySelector(`#outerList input[id="allFields"]`).checked;
+
                 for (let list of dataset) {
-                    const currentBox = document.querySelector(`#typeList input[id="${list.name}"]`);
-                    list.type = currentBox.checked ? "care" : "wait";
+                    const checkbox = document.querySelector(`#fieldList input[id="${list.name}"]`);
+                    checkbox.checked = newState;
                 }
 
-                // saving the dataset to storage
-                sessionStorage.setItem("dataset", JSON.stringify(dataset));
+                boxesChecked = newState ? dataset.length : 0;
+            });
 
-                // can access the dataset like this:
-                console.log(JSON.parse(sessionStorage.getItem("dataset")));
+            // adding listeners to each child checkbox to make them uncheck the parent if unchecked
+            for (let list of dataset) {
+                const checkbox = document.querySelector(`#fieldList input[id="${list.name}"]`);
 
-                // code to create the graphs would go here
-                // also add code to hide this div
-                console.log("Creating graphs!");
-                const pie = React.createElement(PieCharts);
-                const chart = document.createElement("div");
-                chart.innerHTML = pie;
-                
-                const appDiv = document.querySelector("div.App");
-                appDiv.appendChild(chart);
-                
+                checkbox.addEventListener("click", () => {
+                    const newState = checkbox.checked;
+
+                    const parentBox = document.querySelector(`#outerList input[id="allFields"]`);
+                    if (newState) {
+                        if (boxesChecked == 0) {
+                            // change parent to indeterminate
+                            parentBox.checked = false;
+                            parentBox.indeterminate = true;
+                        }
+                        boxesChecked++;
+                        if (boxesChecked == dataset.length) {
+                            // check parent
+                            parentBox.indeterminate = false;
+                            parentBox.checked = true;
+                        }
+                    } else {
+                        boxesChecked--;
+                        parentBox.indeterminate = true;
+                        parentBox.checked = false;
+                        if (boxesChecked == 0) {
+                            // uncheck parent
+                            parentBox.indeterminate = false;
+                            parentBox.checked = false;
+                        }
+                    }
+                });
+            }
+
+            // creating a visualize button that will remove unchecked fields from dataset
+            const continueBtn = document.createElement("button");
+            continueBtn.onclick = () => {
+                // reading checkmarks and saving as property
+                for (let i = 0; i < dataset.length; i++) {
+                    const currentBox = document.querySelector(`#fieldList input[id="${dataset[i].name}"]`);
+                    if (!currentBox.checked) {
+                        dataset.splice(i, 1); // remove list from dataset
+                    }
+                }
+
+                // remove the lists for this step and transition to step 2
+                dataImportDiv.removeChild(document.querySelector("#outerList"));
+                dataImportDiv.removeChild(continueBtn);
+
+                // step 2
+                waitSelection();
             };
-            visualizeBtn.innerHTML = "Create Visualizations";
+            continueBtn.innerHTML = "Continue";
 
-            dataImportDiv.appendChild(visualizeBtn);
+            dataImportDiv.appendChild(continueBtn);
+
+            // step 2: classify fields as wait or care
+            const waitSelection = () => {
+                // change instructions
+                const instructions = document.getElementById("inputInstructions");
+                instructions.innerHTML = "Dataset trimmed! Check all steps that should be classified as care time, and leave all steps that are wait time unchecked."
+
+                // list of checkboxes to indicate which steps are wait vs care time
+                const buttonList = document.createElement("ul");
+                buttonList.id = "typeList";
+                buttonList.style = "list-style: none";
+
+                for (let list of dataset) {
+                    // building out the checkboxes
+                    const item = document.createElement("li");
+
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.id = list.name;
+
+                    const label = document.createElement("label");
+                    label.for = list.name;
+                    label.innerHTML = list.name;
+
+                    // putting the components into a list item and adding that item to the list
+                    item.appendChild(checkbox);
+                    item.appendChild(label);
+                    buttonList.appendChild(item);
+                }
+                // putting the list into the div
+                dataImportDiv.appendChild(buttonList);
+
+                // creating a visualize button that will create the graphs
+                const visualizeBtn = document.createElement("button");
+                visualizeBtn.onclick = () => {
+                    // reading checkmarks and saving as property
+                    for (let list of dataset) {
+                        const currentBox = document.querySelector(`#typeList input[id="${list.name}"]`);
+                        list.type = currentBox.checked ? "care" : "wait";
+                    }
+
+                    // saving the dataset to storage
+                    sessionStorage.setItem("dataset", JSON.stringify(dataset));
+
+                    // can access the dataset like this:
+                    console.log(JSON.parse(sessionStorage.getItem("dataset")));
+
+                    // code to create the graphs would go here
+                    // also add code to hide this div
+                    console.log("Creating graphs!");
+                };
+                visualizeBtn.innerHTML = "Create Visualizations";
+
+                dataImportDiv.appendChild(visualizeBtn);
+            };
         });
     }
 
@@ -144,8 +260,8 @@ const DataInput = () => {
         <div className="dataIn">
             <input type="file" id="dataInForm" onChange={ProcessDataset}></input>
             <div className="dataInSettings" id="dataInSettings" style={{display: "none"}}>
-                <p>
-                    Data was successfully loaded! Check which steps involve waiting, and leave all care steps unchecked.
+                <p id="inputInstructions">
+                    Data was successfully loaded! Check all steps that should be processed as steps of the process.
                 </p>
             </div>
         </div>
