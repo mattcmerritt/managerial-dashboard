@@ -62,6 +62,7 @@ const Chart = (props) => {
                 text: ['Mean Wait Time', 'Mean Care Time'],
                 hovertemplate: "%{label}: <br>Mean Total Time (mins): %{value}"
             });  
+            layout.title = "Time by Room Category";
         }
         else if (props.fields === "action") {
             // should work too
@@ -71,7 +72,8 @@ const Chart = (props) => {
                 values: waitMeans,
                 text: waitNames,
                 hovertemplate: "Room: %{label} <br>Mean Time (mins): %{value}"
-            })
+            });
+            layout.title = "Total Wait Time by Room";
         }
 
         // customize layout for pie charts
@@ -147,6 +149,8 @@ const Chart = (props) => {
             }
 
             layout.barmode = "stack";
+            layout.title = "Mean Times by Room (mins)";
+            layout.yaxis = {title: "Mean (mins)"};
         }
         else if (props.fields === "stackedmeanpercents") {
             for(let i = 0; i < rooms.length; i++) {
@@ -161,6 +165,8 @@ const Chart = (props) => {
             }
 
             layout.barmode = "stack";
+            layout.title = "Mean Times by Room (%)";
+            layout.yaxis = {title: "Mean (mins)"};
         }
         else if (props.fields === "rooms") {
             var meanTrace = {
@@ -188,6 +194,9 @@ const Chart = (props) => {
             //data = [meanTrace, stdvTrace, rangeTrace];
 
             layout.barmode = "group";
+            layout.title = "Patient Times by Room";
+            layout.xaxis = {title: "Room"};
+            layout.yaxis = {title: "Time (mins)"};
         }
 
         // customize layout for pillar charts
