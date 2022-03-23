@@ -231,12 +231,32 @@ const DataInput = () => {
                     // code to create the graphs would go here
                     // also add code to hide this div
                     console.log("Creating graphs!");
+                    CreateVisualizations();
                 };
                 visualizeBtn.innerHTML = "Create Visualizations";
 
                 dataImportDiv.appendChild(visualizeBtn);
             };
         });
+    }
+
+    const CreateVisualizations = async () => {
+        console.log("Creating graphs");
+
+        const pie = <Chart type="pie" fieldList="wait+care"/>;
+
+        const graphData = [{
+            element: pie,
+            hasRec: true,
+            rec: "This is the recommendation"
+        }];
+
+        // can access the dataset like this:
+        sessionStorage.setItem("graphs", JSON.stringify(graphData));
+        sessionStorage.setItem("graphsReady", true);
+
+        // force a rerender
+        
     }
 
     const ProcessDataset = async (e) => {

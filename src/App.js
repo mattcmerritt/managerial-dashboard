@@ -126,11 +126,17 @@ class App extends Component {
   }
   */
 
+  constructor(props) {
+    super(props);
+    this.state = { hasData: false };
+  }
+
   render() {
     return (
       <div className="App">
         <Navbar />
         <DataInput />
+        {this.state.hasData ? JSON.parse(sessionStorage.getItem("graph")).element : null}
       </div>
     )
   }
