@@ -252,30 +252,25 @@ const DataInput = () => {
         const pie2 = <Chart chartType="pie" fields="action"/>;
         const pillar = <Chart chartType="pillar" fields="rooms"/>;
 
-        /*
-        const graphData = [{
-            element: pie,
-            hasRec: true,
-            rec: "This is the recommendation"
-        }];
+        const charts = [
+            <Chart chartType="pie" fields="wait+care"/>,
+            <Chart chartType="pie" fields="action"/>,
+            <Chart chartType="pillar" fields="rooms"/>,
+        ];
 
-        // can access the dataset like this:
-        sessionStorage.setItem("graphs", JSON.stringify(graphData));
-        sessionStorage.setItem("graphsReady", true);
-        */
-
-        // force a rerender
-        let chartDiv;
-        const getChartDiv = new Promise((resolve, reject) => {
-            chartDiv = document.getElementById("chartsDiv");
+        let parentChartDiv;
+        const getParentChartDiv = new Promise((resolve, reject) => {
+            parentChartDiv = document.getElementById("chartsDiv");
 
             resolve();
         });
 
-        getChartDiv.then(() => ReactDOM.render(pie, chartDiv));
-        getChartDiv.then(() => ReactDOM.render(pie2, chartDiv));
-        getChartDiv.then(() => ReactDOM.render(pillar, chartDiv));
-        
+        for (let chart of charts) {
+            let chartDiv = document.createElement("div");
+            parentChartDiv.appendChild(chartDiv);
+
+            ReactDOM.render(chart, chartDiv);
+        }        
     }
 
     const ProcessDataset = async (e) => {
