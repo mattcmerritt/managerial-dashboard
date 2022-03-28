@@ -6,7 +6,7 @@ const Chart = (props) => {
     let layout = {};
 
     // read in data from excel
-    let processedData = JSON.parse(sessionStorage.getItem("dataset"));
+    let processedData = JSON.parse(sessionStorage.getItem(props.source + "Dataset"));
 
     if (props.chartType === "pie") {
         

@@ -90,3 +90,15 @@
 
   padding: 20px;
 }
+
+nav {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+nav * {
+  margin-right: 30px;
+}

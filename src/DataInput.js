@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import Chart from "./Chart";
 
-const DataInput = () => {
+const DataInput = (props) => {
     let XLSX = require("xlsx");
 
     const LoadFile = async (e) => {
@@ -58,7 +58,7 @@ const DataInput = () => {
         // creating a promise to wait until we get div to make changes to it
         let dataImportDiv;
         const waitForDOM = new Promise((resolve, reject) => {
-            dataImportDiv = document.getElementById("dataInSettings");
+            dataImportDiv = document.getElementById(props.group + "DataInSettings");
     
             resolve();
         });
@@ -186,7 +186,7 @@ const DataInput = () => {
             // step 2: classify fields as wait or care
             const waitSelection = () => {
                 // change instructions
-                const instructions = document.getElementById("inputInstructions");
+                const instructions = document.getElementById(props.group + "InputInstructions");
                 instructions.innerHTML = "Dataset trimmed! Check all steps that should be classified as care time, and leave all steps that are wait time unchecked."
 
                 // list of checkboxes to indicate which steps are wait vs care time
@@ -224,10 +224,10 @@ const DataInput = () => {
                     }
 
                     // saving the dataset to storage
-                    sessionStorage.setItem("dataset", JSON.stringify(dataset));
+                    sessionStorage.setItem(props.group + "Dataset", JSON.stringify(dataset));
 
                     // can access the dataset like this:
-                    console.log(JSON.parse(sessionStorage.getItem("dataset")));
+                    console.log(JSON.parse(sessionStorage.getItem(props.group + "Dataset")));
 
                     // code to create the graphs would go here
                     // also add code to hide this div
@@ -235,7 +235,7 @@ const DataInput = () => {
 
                     // removing the data input elements
                     const appDiv = document.getElementsByClassName("App")[0];
-                    const dataIn = document.getElementsByClassName("dataIn")[0];
+                    const dataIn = document.getElementsByClassName(props.group + "DataIn")[0];
                     appDiv.removeChild(dataIn);
                 };
                 visualizeBtn.innerHTML = "Create Visualizations";
@@ -248,29 +248,52 @@ const DataInput = () => {
     const CreateVisualizations = async () => {
         console.log("Creating graphs");
 
-        const charts = [
-            <Chart chartType="pie" fields="wait+care" rec="Recommendation from chart 1." id="pie1"/>,
-            <Chart chartType="pie" fields="action" rec="Recommendation from chart 2." id="pie2"/>,
-            <Chart chartType="pillar" fields="rooms" rec="Recommendation from chart 3." id="pillar1"/>,
-            <Chart chartType="pillar" fields="stackedmeans" rec="Recommendation from chart 4." id="pillar2"/>,
-            <Chart chartType="pillar" fields="stackedmeanpercents" rec="Recommendation from chart 5." id="pillar3"/>,
-        ];
-
-        let parentChartDiv;
-        const getParentChartDiv = new Promise((resolve, reject) => {
-            parentChartDiv = document.getElementById("chartsDiv");
-
-            resolve();
-        });
-
-        getParentChartDiv.then(() => {
-            for (let chart of charts) {
-                let chartDiv = document.createElement("div");
-                parentChartDiv.appendChild(chartDiv);
+        if (props.group === "patient") {
+            const charts = [
+                <Chart chartType="pie" fields="wait+care" rec="Recommendation from chart 1." id="pie1" source={props.group}/>,
+                <Chart chartType="pie" fields="action" rec="Recommendation from chart 2." id="pie2" source={props.group}/>,
+                <Chart chartType="pillar" fields="rooms" rec="Recommendation from chart 3." id="pillar1" source={props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeans" rec="Recommendation from chart 4." id="pillar2" source={props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeanpercents" rec="Recommendation from chart 5." id="pillar3" source={props.group}/>,
+            ];
     
-                ReactDOM.render(chart, chartDiv);
-            }
-        });        
+            let parentChartDiv;
+            const getParentChartDiv = new Promise((resolve, reject) => {
+                parentChartDiv = document.getElementById(props.group + "ChartsDiv");
+    
+                resolve();
+            });
+    
+            getParentChartDiv.then(() => {
+                for (let chart of charts) {
+                    let chartDiv = document.createElement("div");
+                    parentChartDiv.appendChild(chartDiv);
+        
+                    ReactDOM.render(chart, chartDiv);
+                }
+            });   
+        }
+        else if (props.group === "staff") {
+            const charts = [
+                // staff charts here
+            ];
+    
+            let parentChartDiv;
+            const getParentChartDiv = new Promise((resolve, reject) => {
+                parentChartDiv = document.getElementById(props.group + "ChartsDiv");
+    
+                resolve();
+            });
+    
+            getParentChartDiv.then(() => {
+                for (let chart of charts) {
+                    let chartDiv = document.createElement("div");
+                    parentChartDiv.appendChild(chartDiv);
+        
+                    ReactDOM.render(chart, chartDiv);
+                }
+            });
+        }
     }
 
     const ProcessDataset = async (e) => {
@@ -291,10 +314,10 @@ const DataInput = () => {
     }
 
     return (
-        <div className="dataIn">
-            <input type="file" id="dataInForm" onChange={ProcessDataset}></input>
-            <div className="dataInSettings" id="dataInSettings" style={{display: "none"}}>
-                <p id="inputInstructions">
+        <div className={props.group + "DataIn"} style={props.enabled ? {display: "block"} : {display: "none"}}>
+            <input type="file" id={props.group + "DataInForm"} onChange={ProcessDataset}></input>
+            <div className={props.group + "DataInSettings"} id={props.group + "DataInSettings"} style={{display: "none"}}>
+                <p id={props.group + "InputInstructions"}>
                     Data was successfully loaded! Check all steps that should be processed as steps of the process.
                 </p>
             </div>
