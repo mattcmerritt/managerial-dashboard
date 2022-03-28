@@ -252,7 +252,7 @@ const DataInput = (props) => {
             const charts = [
                 <Chart chartType="pie" fields="wait+care" rec="Recommendation from chart 1." id="pie1" source={props.group}/>,
                 <Chart chartType="pie" fields="action" rec="Recommendation from chart 2." id="pie2" source={props.group}/>,
-                <Chart chartType="pillar" fields="rooms" rec="Recommendation from chart 3." id="pillar1" source={props.group}/>,
+                <Chart chartType="pillar" fields="steps" rec="Recommendation from chart 3." id="pillar1" source={props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeans" rec="Recommendation from chart 4." id="pillar2" source={props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeanpercents" rec="Recommendation from chart 5." id="pillar3" source={props.group}/>,
             ];
@@ -275,7 +275,11 @@ const DataInput = (props) => {
         }
         else if (props.group === "staff") {
             const charts = [
-                // staff charts here
+                <Chart chartType="pie" fields="wait+care" rec="Recommendation from chart 1." id="pie1" source={props.group}/>,
+                <Chart chartType="pie" fields="action" rec="Recommendation from chart 2." id="pie2" source={props.group}/>,
+                <Chart chartType="pillar" fields="steps" rec="Recommendation from chart 3." id="pillar1" source={props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeans" rec="Recommendation from chart 4." id="pillar2" source={props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeanpercents" rec="Recommendation from chart 5." id="pillar3" source={props.group}/>,
             ];
     
             let parentChartDiv;

@@ -62,7 +62,7 @@ const Chart = (props) => {
                 text: ['Mean Wait Time', 'Mean Care Time'],
                 hovertemplate: "%{label}: <br>Mean Total Time (mins): %{value}"
             });  
-            layout.title = "Time by Room Category";
+            layout.title = "Time by Step Category";
         }
         else if (props.fields === "action") {
             // should work too
@@ -71,9 +71,9 @@ const Chart = (props) => {
                 labels: waitNames,
                 values: waitMeans,
                 text: waitNames,
-                hovertemplate: "Room: %{label} <br>Mean Time (mins): %{value}"
+                hovertemplate: "Step: %{label} <br>Mean Time (mins): %{value}"
             });
-            layout.title = "Total Wait Time by Room";
+            layout.title = "Total Wait Time by Step";
         }
 
         // customize layout for pie charts
@@ -85,17 +85,17 @@ const Chart = (props) => {
         // -----------------------------------
         // Generate data needed for pillar charts
 
-        let rooms = [];
+        let steps = [];
         let means = [];
         let meanPercents = [];
         let stdvs = [];
         let ranges = [];
         let meanSum = 0;
 
-        // run through all the rooms
+        // run through all the steps
         for(const dataColumn of processedData) {
-            // add room name
-            rooms.push(dataColumn.name);
+            // add step name
+            steps.push(dataColumn.name);
 
             // find mean (sum of all divided by number of elements)
             let mean = 0;
@@ -137,52 +137,52 @@ const Chart = (props) => {
         // -----------------------------------
         // Pick type of pillar chart
         if (props.fields === "stackedmeans") {
-            for(let i = 0; i < rooms.length; i++) {
+            for(let i = 0; i < steps.length; i++) {
                 data.push({
                     type: 'bar',
                     x: [""],
                     y: [means[i]],
-                    name: rooms[i],
-                    hovertemplate: "Room: " + rooms[i] + "<br>Mean Time (mins): %{y}",
+                    name: steps[i],
+                    hovertemplate: "Step: " + steps[i] + "<br>Mean Time (mins): %{y}",
                     width: 0.1
                 });
             }
 
             layout.barmode = "stack";
-            layout.title = "Mean Times by Room (mins)";
+            layout.title = "Mean Times by Step (mins)";
             layout.yaxis = {title: "Mean (mins)"};
         }
         else if (props.fields === "stackedmeanpercents") {
-            for(let i = 0; i < rooms.length; i++) {
+            for(let i = 0; i < steps.length; i++) {
                 data.push({
                     type: 'bar',
                     x: [""],
                     y: [meanPercents[i]],
-                    name: rooms[i],
-                    hovertemplate: "Room: " + rooms[i] + "<br>Mean Time (%): %{y}%",
+                    name: steps[i],
+                    hovertemplate: "Step: " + steps[i] + "<br>Mean Time (%): %{y}%",
                     width: 0.1
                 });
             }
 
             layout.barmode = "stack";
-            layout.title = "Mean Times by Room (%)";
+            layout.title = "Mean Times by Step (%)";
             layout.yaxis = {title: "Mean (mins)"};
         }
-        else if (props.fields === "rooms") {
+        else if (props.fields === "steps") {
             var meanTrace = {
-                x: rooms,
+                x: steps,
                 y: means,
                 name: "Mean",
                 type: "bar"
             };
             var stdvTrace = {
-                x: rooms,
+                x: steps,
                 y: stdvs,
                 name: "Standard Dev.",
                 type: "bar"
             };
             var rangeTrace = {
-                x: rooms,
+                x: steps,
                 y: ranges,
                 name: "Range",
                 type: "bar"
@@ -194,8 +194,8 @@ const Chart = (props) => {
             //data = [meanTrace, stdvTrace, rangeTrace];
 
             layout.barmode = "group";
-            layout.title = "Patient Times by Room";
-            layout.xaxis = {title: "Room"};
+            layout.title = "Times by Step";
+            layout.xaxis = {title: "Step"};
             layout.yaxis = {title: "Time (mins)"};
         }
 
@@ -222,126 +222,6 @@ const Chart = (props) => {
             <p id="recText" style={{display: "none"}}>{props.rec}</p>
         </div>
     );
-
-    // this is the debug return for wait+care pie
-    /*
-    return (
-        <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
-            <Plot 
-            data = {
-                [{
-                    type: 'pie',
-                    labels: ['Wait Time', 'Care Time'],
-                    values: [38.3*2, 61.7*2],
-                    text: ['Mean Wait Time', 'Mean Care Time'],
-                    hovertemplate: "%{label}: <br>Mean Total Time (mins): %{value}"
-                }]
-            }
-
-            layout = {
-                {
-                    height: 400,
-                    width: 500
-                }
-            }
-            />
-        </div>
-    );
-    */
-
-    // this is the debug return for action pie
-    /*
-    return (
-        <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
-            <Plot 
-            data = {
-                [{
-                    type: 'pie',
-                    labels: ["Wait 1", "Wait 2", "Wait 3"],
-                    values: [40, 50, 60],
-                    text: ["Wait 1", "Wait 2", "Wait 3"],
-                    hovertemplate: "Room: %{label} <br>Mean Time (mins): %{value}"
-                }]
-            }
-
-            layout = {
-                {
-                    height: 400,
-                    width: 500
-                }
-            }
-            />
-        </div>
-    );
-    */
-
-    // this is the debug return for stackedmeans
-    // this does not work
-    /*
-    return (
-        <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
-            <Plot 
-            data = {
-                [{
-                    type: 'bar',
-                    title: "Mean Times by Room (mins)",
-                    x: [],
-                    y: [10, 20, 30, 40, 50, 60],
-                    labels: ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5", "Room 6"],
-                    hovertemplate: "Room: %{label} <br>Mean Time (mins): %{y}"
-                }]
-            }
-
-            layout = {
-                {
-                    height: 400,
-                    width: 500
-                }
-            }
-            />
-        </div>
-    );
-    */
-
-    // this is the debug return for rooms pillar
-    /*
-    return (
-        <div className="graphWindow" style={{display: "inline-block", width: "30%"}}>
-            <Plot 
-            data = {
-                [
-                    {
-                        x: ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"],
-                        y: [20, 30, 15, 10, 25],
-                        name: "Mean",
-                        type: "bar"
-                    },
-                    {
-                        x: ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"],
-                        y: [10, 15, 20, 25, 12],
-                        name: "Standard Dev.",
-                        type: "bar"
-                    },
-                    {
-                        x: ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"],
-                        y: [50, 40, 30, 10, 25],
-                        name: "Range",
-                        type: "bar"
-                    }
-                ]
-            }
-
-            layout = {
-                {
-                    height: 400,
-                    width: 500,
-                    barmode: "group"
-                }
-            }
-            />
-        </div>
-    );
-    */
 }
 
 export default Chart;
