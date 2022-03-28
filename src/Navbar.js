@@ -102,7 +102,6 @@ const Navbar = () => {
                         let recObj;
                         // finding recommendations object in data array
                         for (let rec of data) {
-                            console.log(rec);
                             if (rec.id === chart.chartId) {
                                 recObj = rec;
                                 // overwriting expert recommendation

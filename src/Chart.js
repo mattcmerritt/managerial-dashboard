@@ -213,7 +213,8 @@ const Chart = (props) => {
             />
             <button 
             onClick={() => {
-                let text = document.querySelector(`#${props.id} p`);
+                let chartDiv = document.getElementById(props.source + "ChartsDiv");
+                let text = chartDiv.querySelector(`#${props.id} p`);
                 text.style.display = "inline-block";
 
                 // recommendations
