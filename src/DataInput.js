@@ -229,6 +229,65 @@ const DataInput = (props) => {
                     // can access the dataset like this:
                     console.log(JSON.parse(sessionStorage.getItem(props.group + "Dataset")));
 
+                    // create the recommendations
+                    let recommendations = [];
+                    if(props.group === "patient") {
+                        recommendations.push({
+                            id: "pie1",
+                            genericRecommendation: "The patient is spending a considerable percent of their time waiting. See the other visualizations to find the steps responsible for the large wait.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pie2",
+                            genericRecommendation: "This chart shows the percent of the total wait experienced by a patient each wait step is.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pillar1",
+                            genericRecommendation: "There is a large range for the Provider step. It may be worth looking into what could be causing this range.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pillar2",
+                            genericRecommendation: "Below you see a pillar chart. This first pillar chart will show the average overall time. \nThe bar will be broken to show how much time is spend in each location within the entire average time.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pillar3",
+                            genericRecommendation: "Now after seeing that, we will look at the average total time as a percent. \nThe location with the largest percentage will be our first focus point.",
+                            expertRecommendation: undefined
+                        });
+                    }
+                    else if (props.group === "staff") {
+                        recommendations.push({
+                            id: "pie1",
+                            genericRecommendation: "The staff is spending most of their time caring for patients.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pie2",
+                            genericRecommendation: "Since there is only one wait step, there is not much to conclude here.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pillar1",
+                            genericRecommendation: "Consider minimizing the range for the Walk Back step.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pillar2",
+                            genericRecommendation: "Below you see a pillar chart. This first pillar chart will show the average overall time. \nThe bar will be broken to show how much time is spend in each location within the entire average time.",
+                            expertRecommendation: undefined
+                        });
+                        recommendations.push({
+                            id: "pillar3",
+                            genericRecommendation: "This chart shows the average overall time of each step as a percent of the total time.",
+                            expertRecommendation: undefined
+                        });
+                    }
+
+                    sessionStorage.setItem(props.group + "Recommendations", JSON.stringify(recommendations));
+
                     // code to create the graphs would go here
                     // also add code to hide this div
                     CreateVisualizations();
