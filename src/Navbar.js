@@ -14,17 +14,27 @@ const Navbar = () => {
         });
         
         ActiveView.then(() => {
-            if (patientCharts.style.display === "block") {
+            if (patientCharts.style.display === "flex") {
                 title.innerHTML = "Managerial Dashboard - Staff Data";
-                patientIn.style.display = "none";
+                if (patientIn !== undefined) {
+                    patientIn.style.display = "none";
+                }
                 patientCharts.style.display = "none";
-                staffIn.style.display = "block";
-                staffCharts.style.display = "block";
+
+                if (staffIn !== undefined) {
+                    staffIn.style.display = "block";
+                }
+                staffCharts.style.display = "flex";
             } else {
                 title.innerHTML = "Managerial Dashboard - Patient Data";
-                patientIn.style.display = "block";
-                patientCharts.style.display = "block";
-                staffIn.style.display = "none";
+                if (patientIn !== undefined) {
+                    patientIn.style.display = "block";
+                }
+                patientCharts.style.display = "flex";
+
+                if (staffIn !== undefined) {
+                    staffIn.style.display = "none";
+                }
                 staffCharts.style.display = "none";
             }
         });

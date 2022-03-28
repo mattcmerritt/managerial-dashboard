@@ -69,7 +69,7 @@
   justify-content: left;
 }
 
-.charts {
+.patientCharts, .staffCharts {
   position: relative;
   display: flex;
   justify-content: space-around;
