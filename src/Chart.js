@@ -230,7 +230,7 @@ const Chart = (props) => {
 
                 // loading recommendations from object
                 if (recObj.genericRecommendation !== undefined && recObj.expertRecommendation !== undefined) {
-                    recText = recObj.genericRecommendation + "\n\n" + "Expert Recommendation: " + recObj.expertRecommendation;
+                    recText = recObj.genericRecommendation + "<br><br>" + "Expert Recommendation: " + recObj.expertRecommendation;
                 } else if (recObj.genericRecommendation !== undefined) {
                     recText = recObj.genericRecommendation;
                 } else if (recObj.expertRecommendation !== undefined) {
