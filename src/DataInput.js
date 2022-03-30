@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom';
 import Chart from "./Chart";
+import ProcessFlow from './ProcessFlow';
 
 const DataInput = (props) => {
     let XLSX = require("xlsx");
@@ -339,6 +340,7 @@ const DataInput = (props) => {
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusStack" id="focusstack" source={props.group}/>,
+                // <ProcessFlow source={props.group}/>,
             ];
     
             let parentChartDiv;

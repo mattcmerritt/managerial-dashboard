@@ -153,6 +153,19 @@ const Chart = (props) => {
         sessionStorage.setItem("focusPillarRecommendation", `For this data, the minimum time is ${focusMin} minutes and the maximum time is ${focusMax} minutes. Standardization will allow us to standardize the minimum. Each person can now use this new standard. Theoretically making the average time equal to the minimum, in return making the overall lead time to decrease.`);
         sessionStorage.setItem("focusStackRecommendation", `The figure above shows the current mean times with the optimal ${focusName} time. This theoretical number can be achieved by performing kaizen events.`);
 
+        // iterating through data set
+        const recommendationSet = JSON.parse(sessionStorage.getItem(props.source + "Recommendations"));
+        recommendationSet.push({
+            id: "focuspillar",
+            genericRecommendation: sessionStorage.getItem("focusPillarRecommendation")
+        });
+        recommendationSet.push({
+            id: "focusstack",
+            genericRecommendation: sessionStorage.getItem("focusStackRecommendation")
+        });
+        sessionStorage.setItem(props.source + "Recommendations", JSON.stringify(recommendationSet));
+
+
         // -----------------------------------
         // Pick type of pillar chart
         if (props.fields === "stackedmeans") {
