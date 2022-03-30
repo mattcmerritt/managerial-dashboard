@@ -286,6 +286,29 @@ const DataInput = (props) => {
                         });
                     }
 
+                    if (sessionStorage.getItem("expertRecommendations") !== null) {
+                        // check for expert recommendations
+                        const expertRecs = JSON.parse(sessionStorage.getItem("expertRecommendations"));
+                        
+                        // getting the right set of recs (patient/staff)
+                        let recSet;
+                        for (let set of expertRecs) {
+                            if (props.group === set.id) {
+                                recSet = set;
+                            }
+                        }
+
+                        // overwriting undefined recommendations
+                        for (let rec of recSet.recs) {
+                            // find corresponding chart in recommendations array
+                            for (let chart of recommendations) {
+                                if (chart.id === rec.chartId) {
+                                    chart.expertRecommendation = rec.rec;
+                                }
+                            }
+                        }
+                    }
+
                     sessionStorage.setItem(props.group + "Recommendations", JSON.stringify(recommendations));
 
                     // code to create the graphs would go here

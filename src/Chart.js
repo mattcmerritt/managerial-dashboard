@@ -270,7 +270,6 @@ const Chart = (props) => {
         layout.height = 400;
         layout.width = 500;
     }
-
     
     // this is the proper return
     return (
@@ -281,12 +280,38 @@ const Chart = (props) => {
             />
             <button 
             onClick={() => {
-                let text = document.querySelector(`#${props.id} p`);
+                let chartDiv = document.getElementById(props.source + "ChartsDiv");
+                let text = chartDiv.querySelector(`#${props.id} p`);
                 text.style.display = "inline-block";
+
+                // recommendations
+                let recText = "Recommendations could not be loaded.";
+                let recArray = JSON.parse(sessionStorage.getItem(props.source + "Recommendations"));
+                let recObj;
+
+                // finding recommendations object in array
+                for (let rec of recArray) {
+                    if (rec.id === props.id) {
+                        recObj = rec;
+                    }
+                }
+
+                // loading recommendations from object
+                if (recObj.genericRecommendation !== undefined && recObj.expertRecommendation !== undefined) {
+                    recText = recObj.genericRecommendation + "<br><br>" + "Expert Recommendation: " + recObj.expertRecommendation;
+                } else if (recObj.genericRecommendation !== undefined) {
+                    recText = recObj.genericRecommendation;
+                } else if (recObj.expertRecommendation !== undefined) {
+                    recText = "Expert Recommendation: " + recObj.expertRecommendation;
+                } else {
+                    recText = "No recommendations were found.";
+                }
+
+                text.innerHTML = recText;
             }} style={{display : "inline-block"}}>
                 Show Recommendation
             </button>
-            <p id="recText" style={{display: "none"}}>{props.rec}</p>
+            <p id="recText" style={{display: "none"}}></p>
         </div>
     );
 }
