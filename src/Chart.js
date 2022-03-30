@@ -91,6 +91,8 @@ const Chart = (props) => {
         let stdvs = [];
         let ranges = [];
         let meanSum = 0;
+        let mins = [];
+        let maxes = [];
 
         // run through all the steps
         for(const dataColumn of processedData) {
@@ -114,13 +116,15 @@ const Chart = (props) => {
             let stdv = Math.sqrt(summation/(dataColumn.data.length - 1));
             stdvs.push(Math.round(stdv * 100)/100);
 
-            // find range
+            // find range, min, and max
             let min = Number.MAX_SAFE_INTEGER;
             let max = Number.MIN_SAFE_INTEGER;
             for(const value of dataColumn.data) {
                 min = Math.min(value, min);
                 max = Math.max(value, max);
             }
+            mins.push(min);
+            maxes.push(max);
             let range = max - min;
             ranges.push(Math.round(range * 100)/100);
         }
@@ -133,6 +137,21 @@ const Chart = (props) => {
             // round means
             means[i] = Math.round(means[i] * 100)/100;
         }
+
+        // find the data to focus on
+        let focusIndex = 0;
+        let maxMean = Number.MIN_SAFE_INTEGER;
+        for(let i = 0; i < means.length; i++) {
+            if(means[i] > maxMean) {
+                maxMean = means[i];
+                focusIndex = i;
+            }
+        }
+        let focusMin = mins[focusIndex];
+        let focusMax = maxes[focusIndex];
+        let focusName = processedData[focusIndex].name;
+        sessionStorage.setItem("focusPillarRecommendation", `For this data, the minimum time is ${focusMin} minutes and the maximum time is ${focusMax} minutes. Standardization will allow us to standardize the minimum. Each person can now use this new standard. Theoretically making the average time equal to the minimum, in return making the overall lead time to decrease.`);
+        sessionStorage.setItem("focusStackRecommendation", `The figure above shows the current mean times with the optimal ${focusName} time. This theoretical number can be achieved by performing kaizen events.`);
 
         // -----------------------------------
         // Pick type of pillar chart
@@ -197,6 +216,54 @@ const Chart = (props) => {
             layout.title = "Times by Step";
             layout.xaxis = {title: "Step"};
             layout.yaxis = {title: "Time (mins)"};
+        }
+        else if(props.fields === "focusPillar") {
+            var meanFocusTrace = {
+                x: [focusName],
+                y: [means[focusIndex]],
+                name: "Mean",
+                type: "bar"
+            };
+            var stdvFocusTrace = {
+                x: [focusName],
+                y: [stdvs[focusIndex]],
+                name: "Standard Dev.",
+                type: "bar"
+            };
+            var rangeFocusTrace = {
+                x: [focusName],
+                y: [ranges[focusIndex]],
+                name: "Range",
+                type: "bar"
+            };
+            
+            data.push(meanFocusTrace);
+            data.push(stdvFocusTrace);
+            data.push(rangeFocusTrace);
+            //data = [meanTrace, stdvTrace, rangeTrace];
+
+            layout.barmode = "group";
+            layout.title = "Times (Focused)";
+            layout.xaxis = {title: "Step"};
+            layout.yaxis = {title: "Time (mins)"};
+        }
+        else if(props.fields === "focusStack") {
+            let adjustedMeans = means;
+            adjustedMeans[focusIndex] = focusMin;
+            for(let i = 0; i < steps.length; i++) {
+                data.push({
+                    type: 'bar',
+                    x: [""],
+                    y: [adjustedMeans[i]],
+                    name: steps[i],
+                    hovertemplate: "Step: " + steps[i] + "<br>Mean Time (mins): %{y}",
+                    width: 0.1
+                });
+            }
+
+            layout.barmode = "stack";
+            layout.title = "Mean Times by Step After Improvement (mins)";
+            layout.yaxis = {title: "Mean (mins)"};
         }
 
         // customize layout for pillar charts
