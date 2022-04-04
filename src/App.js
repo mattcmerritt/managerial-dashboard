@@ -6,7 +6,7 @@ import DataInput from "./DataInput";
 // viz
 import Viz from 'viz.js';
 import workerURL from 'viz.js/full.render.js';
-import GraphvizChart from "./GraphvizChart";
+// import GraphvizChart from "./GraphvizChart";
 
 let viz = new Viz( workerURL );
 
@@ -16,11 +16,11 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        <DataInput group="patient" enabled={true}/>
+        <DataInput group="patient" enabled={true} viz={viz}/>
         <div className="patientCharts" id="patientChartsDiv" style={{display: "flex"}}></div>
-        <DataInput group="staff" enabled={false}/>
+        <DataInput group="staff" enabled={false} viz={viz}/>
         <div className="staffCharts" id="staffChartsDiv" style={{display: "none"}}></div>
-        <GraphvizChart src={"digraph { a -> b; }"} engine={"dot"} viz={viz} data="patient"/>
+        {/* <GraphvizChart src={"digraph { a -> b; }"} engine={"dot"} viz={viz} data="patient"/> */}
       </div>
     )
   }

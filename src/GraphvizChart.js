@@ -24,17 +24,16 @@ class GraphvizChart extends Component {
 
     componentDidMount() {
         this.updateDisplay();
-        console.log("In mount");
     }
 
     componentDidUpdate() {
         this.containerRef.current.appendChild(this.state.element);
-        console.log("In update");
     }
 
     render() {
         return (
             <div className={this.props.data + "-viz-chart"}>
+                <h3>{this.props.title}</h3>
                 <div className="element" ref={this.containerRef}></div>
             </div>
         );
