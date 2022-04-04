@@ -382,7 +382,6 @@ const DataInput = (props) => {
             const dot = CreateProcessFlow();
 
             const charts = [
-                <GraphvizChart src={dot} engine={"dot"} viz={props.viz} data={props.group} title="Patient Process Flow Diagram" />,
                 <Chart chartType="pie" fields="wait+care" id="pie1" source={props.group}/>,
                 <Chart chartType="pie" fields="action" id="pie2" source={props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={props.group}/>,
@@ -390,6 +389,7 @@ const DataInput = (props) => {
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusStack" id="focusstack" source={props.group}/>,
+                <GraphvizChart src={dot} engine={"dot"} viz={props.viz} data={props.group} title="Patient Process Flow Diagram" />,
             ];
     
             let parentChartDiv;
@@ -412,7 +412,6 @@ const DataInput = (props) => {
             const dot = CreateProcessFlow();
 
             const charts = [
-                <GraphvizChart src={dot} engine={"dot"} viz={props.viz} data={props.group} title="Staff Process Flow Diagram" />,
                 <Chart chartType="pie" fields="wait+care" id="pie1" source={props.group}/>,
                 <Chart chartType="pie" fields="action" id="pie2" source={props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={props.group}/>,
@@ -420,6 +419,7 @@ const DataInput = (props) => {
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusStack" id="focusstack" source={props.group}/>,
+                <GraphvizChart src={dot} engine={"dot"} viz={props.viz} data={props.group} title="Staff Process Flow Diagram" />,
             ];
     
             let parentChartDiv;
