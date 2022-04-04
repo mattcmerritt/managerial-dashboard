@@ -340,7 +340,7 @@ const DataInput = (props) => {
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={props.group}/>,
                 <Chart chartType="pillar" fields="focusStack" id="focusstack" source={props.group}/>,
-                // <ProcessFlow source={props.group}/>,
+                // <ProcessFlowChart source={props.group}/>,
             ];
     
             let parentChartDiv;
