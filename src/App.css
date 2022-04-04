@@ -121,3 +121,56 @@ nav * {
 
   padding: 20px;
 }
+
+.modal {
+  --spacing: 15px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--spacing);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal__inner {
+  background: #ffffff;
+  width: 70vw;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.modal__top {
+  display: flex;
+  align-items: center;
+  background-color: #eeeeee;
+}
+
+.modal__title {
+  flex-grow: 1;
+  padding: 0 var(--spacing);
+  font-size: 20pt;
+  font-weight: bold;
+}
+
+.modal__close {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--spacing);
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.modal__content {
+  padding: 0 var(--spacing);
+  line-height: 1.5;
+  justify-content: center;
+  text-align: left;
+}

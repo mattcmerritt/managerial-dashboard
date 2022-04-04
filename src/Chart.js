@@ -1,9 +1,16 @@
 import Plot from 'react-plotly.js';
+import ReactDOM from 'react-dom';
 
 const Chart = (props) => {
 
     let data = [];
     let layout = {};
+
+    let dataBefore = [];
+    let layoutBefore = {};
+
+    let dataAfter = [];
+    let layoutAfter = {};
 
     // read in data from excel
     let processedData = JSON.parse(sessionStorage.getItem(props.source + "Dataset"));
@@ -231,6 +238,7 @@ const Chart = (props) => {
             layout.yaxis = {title: "Time (mins)"};
         }
         else if(props.fields === "focusPillar") {
+            // main focus pillar chart info
             var meanFocusTrace = {
                 x: [focusName],
                 y: [means[focusIndex]],
@@ -259,6 +267,47 @@ const Chart = (props) => {
             layout.title = "Times (Focused)";
             layout.xaxis = {title: "Step"};
             layout.yaxis = {title: "Time (mins)"};
+
+            // before stack data (stackedmeans)
+            for(let i = 0; i < steps.length; i++) {
+                dataBefore.push({
+                    type: 'bar',
+                    x: [""],
+                    y: [means[i]],
+                    name: steps[i],
+                    hovertemplate: "Step: " + steps[i] + "<br>Mean Time (mins): %{y}",
+                    width: 0.1
+                });
+            }
+
+            layoutBefore.barmode = "stack";
+            layoutBefore.title = "Mean Times Before (mins)";
+            layoutBefore.yaxis = {title: "Mean (mins)"};
+
+            layoutBefore.height = 400;
+            layoutBefore.width = 400;
+
+            // after stack data (focusStack)
+            let adjustedMeans = means;
+            adjustedMeans[focusIndex] = focusMin;
+            for(let i = 0; i < steps.length; i++) {
+                dataAfter.push({
+                    type: 'bar',
+                    x: [""],
+                    y: [adjustedMeans[i]],
+                    name: steps[i],
+                    hovertemplate: "Step: " + steps[i] + "<br>Mean Time (mins): %{y}",
+                    width: 0.1
+                });
+            }
+
+            layoutAfter.barmode = "stack";
+            layoutAfter.title = "Mean Times After (mins)";
+            layoutAfter.yaxis = {title: "Mean (mins)"};
+
+            layoutAfter.height = 400;
+            layoutAfter.width = 400;
+
         }
         else if(props.fields === "focusStack") {
             let adjustedMeans = means;
@@ -284,6 +333,32 @@ const Chart = (props) => {
         layout.width = 500;
     }
     
+    const CreateModal = (title, content) => {
+        const modal = document.createElement("div");
+      
+        modal.classList.add("modal");
+        modal.innerHTML = `
+            <div class="modal__inner">
+                <div class="modal__top">
+                    <div class="modal__title">${title}</div>
+                    <button class="modal__close" type="button">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="modal__content"></div>
+            </div>
+        `;
+
+        const modalContent = modal.querySelector(".modal__content");
+        modalContent.appendChild(content);
+      
+        modal.querySelector(".modal__close").addEventListener("click", () => {
+            document.body.removeChild(modal);
+        });
+      
+        document.body.appendChild(modal);
+    }
+
     // this is the proper return
     return (
         <div className="graphWindow" id={props.id}>
@@ -293,8 +368,7 @@ const Chart = (props) => {
             />
             <button 
             onClick={() => {
-                let chartDiv = document.getElementById(props.source + "ChartsDiv");
-                let text = chartDiv.querySelector(`#${props.id} p`);
+                let text = document.createElement("p");
                 text.style.display = "inline-block";
 
                 // recommendations
@@ -321,10 +395,26 @@ const Chart = (props) => {
                 }
 
                 text.innerHTML = recText;
+
+                const plot = props.fields === "focusPillar" ? [
+                    <Plot data = {data} layout = {layout}/>,
+                    <Plot data = {dataBefore} layout = {layoutBefore}/>,
+                    <Plot data = {dataAfter} layout = {layoutAfter}/>
+                ] : <Plot data = {data} layout = {layout}/>;
+
+                const content = document.createElement("div");
+                const modalCharts = document.createElement("div");
+                modalCharts.style.display = "flex";
+                content.appendChild(modalCharts);
+
+                ReactDOM.render(plot, modalCharts);
+                content.appendChild(text);
+
+                CreateModal(layout.title.text, content);
+
             }} style={{display : "inline-block"}}>
                 Show Recommendation
             </button>
-            <p id="recText" style={{display: "none"}}></p>
         </div>
     );
 }
