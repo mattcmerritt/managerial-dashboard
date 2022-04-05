@@ -415,6 +415,9 @@ const Chart = (props) => {
             }} style={{display : "inline-block"}}>
                 Show Recommendation
             </button>
+            <br />
+            <label htmlFor={props.source + "-" + props.id + "-expert-rec-in"} id={props.source + "-" + props.id + "-expert-rec-in-label"} style={sessionStorage.getItem("expertView") ? {display: "block"} : {display: "none"}}>Input Expert Recommendation:</label>
+            <textarea id={props.source + "-" + props.id + "-expert-rec-in"} name={props.source + "-" + props.id + "-expert-rec-in"} rows="2" cols="40" style={sessionStorage.getItem("expertView") ? {display: "block"} : {display: "none"}}/>
         </div>
     );
 }

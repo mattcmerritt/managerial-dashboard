@@ -135,6 +135,57 @@ const Navbar = () => {
         });
     }
 
+    const ActivateExpertFields = async () => {
+        const areas = document.getElementsByTagName("textarea");
+
+        for (const element of areas) {
+            const id = element.id;
+            const label = document.getElementById(id + "-label");
+
+            element.style.display = "block";
+            label.style.display = "block";
+        }
+
+        sessionStorage.setItem("expertView", true);
+    }
+
+    const SaveExpertRecommendations = async () => {
+        const recommendations = [
+            {
+                id: "patient",
+                recs: []
+            },
+            {
+                id: "staff",
+                recs: []
+            }
+        ];
+        
+        const areas = document.getElementsByTagName("textarea");
+        for (const area of areas) {
+            // splitting the id into dataset, chartName, and the rest of the id
+            const idParts = area.id.split("-");
+            const dataset = idParts[0];
+            const chartName = idParts[1];
+
+            // if there is a recommendation, add it to the list
+            if (area.value.trim() !== "") {
+                const currentRec = {
+                    chartId: chartName,
+                    rec: area.value
+                };
+
+                for (const recSet of recommendations) {
+                    if (recSet.id === dataset) {
+                        recSet.recs.push(currentRec);
+                    }
+                }
+            }
+        }
+
+        console.log(JSON.stringify(recommendations));
+    }
+
     return (
         <nav className="navbar">
             <h1 id="title">Managerial Dashboard - Patient Data</h1>
@@ -143,6 +194,10 @@ const Navbar = () => {
                 <label htmlFor="RecInput">Load in expert recommendations:</label>
                 <input type="file" id="RecInput" onChange={LoadRecFromFile} accept=".txt"></input>
                 <p id="RecLoaded" style={{display: "none"}}>Expert recommendations successfully loaded from file.</p> 
+            </div>
+            <div className="expertControlPanel">
+                <button onClick={ActivateExpertFields}>Write Expert Recommendations</button>
+                <button onClick={SaveExpertRecommendations}>Save Expert Recommendations</button>
             </div>
             
             

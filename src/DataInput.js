@@ -442,6 +442,11 @@ const DataInput = (props) => {
 
     const ProcessDataset = async (e) => {
         console.log("Processing");
+
+        // Hiding the input form once file is selected
+        const form = document.getElementById(props.group + "DataInForm");
+        form.remove();
+
         const load = new Promise((resolve, reject) => {
             let workbook = LoadFile(e);
 
