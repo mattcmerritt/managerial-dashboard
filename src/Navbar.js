@@ -224,7 +224,7 @@ class Navbar extends Component {
                     <p id="RecLoaded" style={{display: "none"}}>Expert recommendations successfully loaded from file.</p> 
                 </div>
                 <div className="expertControlPanel">
-                    <button onClick={this.activateExpertFields}>Write Expert Recommendations</button>
+                    <button onClick={this.activateExpertFields}>Write Expert Recommendations</button> <br/>
                     <button onClick={this.saveExpertRecommendations}>Save Expert Recommendations</button>
                 </div>
             </nav>
