@@ -6,7 +6,7 @@ const DataInput = (props) => {
     let XLSX = require("xlsx");
 
     const LoadFile = async (e) => {
-        console.log("Loading data");
+        // console.log("Loading data");
         const file = e.target.files[0];
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data);
@@ -15,7 +15,7 @@ const DataInput = (props) => {
     }
 
     const ExtractData = async (workbook) => {
-        console.log("Extracting data");
+        // console.log("Extracting data");
         let worksheet = workbook.Sheets[workbook.SheetNames[0]];    // first sheet in workbook
         var range = XLSX.utils.decode_range(worksheet['!ref']);     // range of sheet
 
@@ -55,7 +55,7 @@ const DataInput = (props) => {
     }
 
     const ShowDataSettings = async (dataset) => {
-        console.log("Showing import settings");
+        // console.log("Showing import settings");
         // creating a promise to wait until we get div to make changes to it
         let dataImportDiv;
         const waitForDOM = new Promise((resolve, reject) => {
@@ -228,7 +228,7 @@ const DataInput = (props) => {
                     sessionStorage.setItem(props.group + "Dataset", JSON.stringify(dataset));
 
                     // can access the dataset like this:
-                    console.log(JSON.parse(sessionStorage.getItem(props.group + "Dataset")));
+                    // console.log(JSON.parse(sessionStorage.getItem(props.group + "Dataset")));
 
                     // create the recommendations
                     let recommendations = [];
@@ -376,7 +376,7 @@ const DataInput = (props) => {
     };
 
     const CreateVisualizations = async () => {
-        console.log("Creating graphs");
+        // console.log("Creating graphs");
 
         if (props.group === "patient") {
             const dot = CreateProcessFlow();
@@ -441,7 +441,12 @@ const DataInput = (props) => {
     }
 
     const ProcessDataset = async (e) => {
-        console.log("Processing");
+        // console.log("Processing");
+
+        // Hiding the input form once file is selected
+        const form = document.getElementById(props.group + "DataInForm");
+        form.remove();
+
         const load = new Promise((resolve, reject) => {
             let workbook = LoadFile(e);
 
