@@ -1,6 +1,16 @@
-const Navbar = () => {
+import React, { Component } from 'react';
 
-    const SwitchView = async () => {
+class Navbar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    componentDidMount() {
+
+    }
+
+    switchView() {
 
         let title, patientIn, patientCharts, staffIn, staffCharts;
         const ActiveView = new Promise((resolve, reject) => {
@@ -40,7 +50,7 @@ const Navbar = () => {
         });
     }
 
-    const LoadRecFromFile = async (e) => {
+    loadRecFromFile(e) {
         let label, form, formLabel;
         let dataGroup;
 
@@ -135,7 +145,7 @@ const Navbar = () => {
         });
     }
 
-    const ActivateExpertFields = async () => {
+    activateExpertFields() {
         const areas = document.getElementsByTagName("textarea");
 
         for (const element of areas) {
@@ -149,7 +159,7 @@ const Navbar = () => {
         sessionStorage.setItem("expertView", true);
     }
 
-    const SaveExpertRecommendations = async () => {
+    saveExpertRecommendations() {
         const recommendations = [
             {
                 id: "patient",
@@ -183,26 +193,43 @@ const Navbar = () => {
             }
         }
 
-        console.log(JSON.stringify(recommendations));
+        // creating the file
+        const fileContents = JSON.stringify(recommendations);
+        const blob = new Blob([fileContents], {type : 'octet-stream'});
+        const fileDownloadUrl = URL.createObjectURL(blob);
+
+        // making the link to download the file
+        const downloadLink = document.createElement("a");
+        downloadLink.href = fileDownloadUrl;
+        downloadLink.style.display = "none";
+        downloadLink.download = "expert-recommendations.txt";
+        document.body.appendChild(downloadLink);
+
+        // using the link and then removing it
+        downloadLink.click();
+        URL.revokeObjectURL(fileDownloadUrl);
+        downloadLink.remove();
+
+        // console.log(JSON.stringify(recommendations));
     }
 
-    return (
-        <nav className="navbar">
-            <h1 id="title">Managerial Dashboard - Patient Data</h1>
-            <button onClick={SwitchView}>Switch Views</button>
-            <div>
-                <label htmlFor="RecInput">Load in expert recommendations:</label>
-                <input type="file" id="RecInput" onChange={LoadRecFromFile} accept=".txt"></input>
-                <p id="RecLoaded" style={{display: "none"}}>Expert recommendations successfully loaded from file.</p> 
-            </div>
-            <div className="expertControlPanel">
-                <button onClick={ActivateExpertFields}>Write Expert Recommendations</button>
-                <button onClick={SaveExpertRecommendations}>Save Expert Recommendations</button>
-            </div>
-            
-            
-        </nav>
-    );
+    render() {
+        return (
+            <nav className="navbar">
+                <h1 id="title">Managerial Dashboard - Patient Data</h1>
+                <button onClick={this.switchView}>Switch Views</button>
+                <div>
+                    <label htmlFor="RecInput">Load in expert recommendations:</label>
+                    <input type="file" id="RecInput" onChange={this.loadRecFromFile} accept=".txt"></input>
+                    <p id="RecLoaded" style={{display: "none"}}>Expert recommendations successfully loaded from file.</p> 
+                </div>
+                <div className="expertControlPanel">
+                    <button onClick={this.activateExpertFields}>Write Expert Recommendations</button>
+                    <button onClick={this.saveExpertRecommendations}>Save Expert Recommendations</button>
+                </div>
+            </nav>
+        );
+    }
 }
 
 export default Navbar;

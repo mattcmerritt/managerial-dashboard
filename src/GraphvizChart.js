@@ -19,7 +19,7 @@ class GraphvizChart extends Component {
             this.setState({text: null, element, error: null });
         });
 
-        console.log("Updating display");
+        // console.log("Updating display");
     }
 
     componentDidMount() {
