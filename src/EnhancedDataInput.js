@@ -11,6 +11,7 @@ class EnhancedDataInput extends Component {
         this.SelectSteps = this.SelectSteps.bind(this);
         this.RemoveUnchecked = this.RemoveUnchecked.bind(this);
         this.ClassifySteps = this.ClassifySteps.bind(this);
+        this.AddCategories = this.AddCategories.bind(this);
         this.PerformStep = this.PerformStep.bind(this);
         this.ContinueProcess = this.ContinueProcess.bind(this);
         this.TerminateProcess = this.TerminateProcess.bind(this);
@@ -79,6 +80,8 @@ class EnhancedDataInput extends Component {
     // button will need to be pressed to get to next step
     async SelectSteps(dataset) {
         const parentDiv = document.getElementById(this.props.group + "DataInSettings");
+        const instructions = document.getElementById(this.props.group + "InputInstructions");
+        instructions.innerHTML = "Data was successfully loaded! Check all steps that should be processed as steps of the process.";
 
         // step 1: remove unecessary columns from the dataset
         const fieldList = document.createElement("ul");
@@ -185,7 +188,7 @@ class EnhancedDataInput extends Component {
 
         // reading checkmarks and saving as property
         for (let i = 0; i < dataset.length; i++) {
-            const currentBox = document.querySelector(`#fieldList input[id="${dataset[i].name}"]`);
+            const currentBox = parentDiv.querySelector(`#fieldList input[id="${dataset[i].name}"]`);
             if (!currentBox.checked) {
                 dataset.splice(i, 1); // remove list from dataset
                 i--;
@@ -193,7 +196,7 @@ class EnhancedDataInput extends Component {
         }
 
         // remove the lists for this step
-        parentDiv.removeChild(document.querySelector("#outerList"));
+        parentDiv.removeChild(parentDiv.querySelector("#outerList"));
 
         // save dataset, move on to next step
         this.setState({dataset: dataset});
@@ -204,6 +207,8 @@ class EnhancedDataInput extends Component {
     // saves edited dataset
     async ClassifySteps(dataset) {
         const parentDiv = document.getElementById(this.props.group + "DataInSettings");
+        const instructions = document.getElementById(this.props.group + "InputInstructions");
+        instructions.innerHTML = "Please classify each step of the process based on what is taking place.";
         // TODO: reimplement classifications with dropdown selections
 
         const categories = ["care", "wait", "travel", "other"];
@@ -232,11 +237,11 @@ class EnhancedDataInput extends Component {
 
             const label = document.createElement("label");
             label.for = list.name;
-            label.innerHTML = `${list.name}:`;
+            label.innerHTML = `${list.name}: `;
 
             // putting the elements into the item, putting item into list
-            item.appendChild(dropdown);
             item.appendChild(label);
+            item.appendChild(dropdown);
             stepList.appendChild(item);
         }
 
@@ -246,12 +251,36 @@ class EnhancedDataInput extends Component {
         this.setState({dataset: dataset});
     }
 
-    // method that ends the chain of method calls in the process
-    async TerminateProcess() {
-        console.log("Process completed!");
-        // remove the button
+    // based on the dropdown options, save the categories to the dataset
+    // saves edited dataset
+    // should start next step without button
+    async AddCategories(dataset) {
         const parentDiv = document.getElementById(this.props.group + "DataInSettings");
-        parentDiv.remove();
+
+        // reading checkmarks and saving as property
+        for (let i = 0; i < dataset.length; i++) {
+            const currentDropdown = parentDiv.querySelector(`#stepList select[id="${dataset[i].name}-select"]`);
+            dataset[i].type = currentDropdown.options[currentDropdown.selectedIndex].value;
+        }
+
+        // remove the lists for this step
+        parentDiv.removeChild(document.querySelector("#stepList"));
+
+        // save dataset, move on to next step
+        this.setState({dataset: dataset});
+        this.ContinueProcess();
+    }
+
+    // method that ends the chain of method calls in the process
+    async TerminateProcess(dataset) {
+        console.log("Process completed!");
+        console.log(dataset);
+        // remove the button and settings div
+        const button = document.querySelector(`.${this.props.group}DataIn button`);
+        button.remove();
+
+        const settings = document.getElementById(this.props.group + "DataInSettings");
+        settings.remove();
 
         // TODO: create the graphs
     }
@@ -275,7 +304,7 @@ class EnhancedDataInput extends Component {
         this.setState(
             {
                 current: 0, 
-                steps: [this.SelectSteps, this.RemoveUnchecked, this.ClassifySteps, this.TerminateProcess], 
+                steps: [this.SelectSteps, this.RemoveUnchecked, this.ClassifySteps, this.AddCategories, this.TerminateProcess], 
                 dataset: initialDataset
             }
         );
@@ -286,10 +315,11 @@ class EnhancedDataInput extends Component {
         nextButton.onclick = this.ContinueProcess;
         nextButton.innerHTML = "Continue";
         
-        const parentDiv = document.getElementById(this.props.group + "DataInSettings");
+        const parentDiv = document.getElementsByClassName(this.props.group + "DataIn")[0];
         parentDiv.appendChild(nextButton);
-
-        parentDiv.style.display = "block";
+        
+        const settings = document.getElementById(this.props.group + "DataInSettings");
+        settings.style.display = "block";
     }
 
     // returns the dataset after performing the given step
@@ -312,9 +342,7 @@ class EnhancedDataInput extends Component {
             <div className={this.props.group + "DataIn"} style={this.props.enabled ? {display : "block"} : {display: "none"}}>
                 <input type="file" id={this.props.group + "DataInForm"} onChange={this.ProcessDataset}></input>
                 <div className={this.props.group + "DataInSettings"} id={this.props.group + "DataInSettings"} style={{display: "none"}}>
-                    <p id={this.props.group + "InputInstructions"}>
-                        Data was successfully loaded! Check all steps that should be processed as steps of the process.
-                    </p>
+                    <p id={this.props.group + "InputInstructions"}></p>
                 </div>
             </div>
         );
