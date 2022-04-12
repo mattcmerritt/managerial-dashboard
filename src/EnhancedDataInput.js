@@ -145,12 +145,12 @@ class EnhancedDataInput extends Component {
 
         // adding listeners to each child checkbox to make them uncheck the parent if unchecked
         for (let list of dataset) {
-            const checkbox = document.querySelector(`#fieldList input[id="${list.name}"]`);
+            const checkbox = parentDiv.querySelector(`#fieldList input[id="${list.name}"]`);
 
             checkbox.addEventListener("click", () => {
                 const newState = checkbox.checked;
 
-                const parentBox = document.querySelector(`#outerList input[id="allFields"]`);
+                const parentBox = parentDiv.querySelector(`#outerList input[id="allFields"]`);
                 if (newState) {
                     if (boxesChecked === 0) {
                         // change parent to indeterminate
@@ -264,7 +264,7 @@ class EnhancedDataInput extends Component {
         }
 
         // remove the lists for this step
-        parentDiv.removeChild(document.querySelector("#stepList"));
+        parentDiv.removeChild(parentDiv.querySelector("#stepList"));
 
         // save dataset, move on to next step
         this.setState({dataset: dataset});
@@ -273,8 +273,6 @@ class EnhancedDataInput extends Component {
 
     // method that ends the chain of method calls in the process
     async TerminateProcess(dataset) {
-        console.log("Process completed!");
-        console.log(dataset);
         // remove the button and settings div
         const button = document.querySelector(`.${this.props.group}DataIn button`);
         button.remove();

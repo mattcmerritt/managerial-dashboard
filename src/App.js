@@ -17,11 +17,10 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        {/* <DataInput group="patient" enabled={true} viz={viz}/>
+        <EnhancedDataInput group="patient" enabled={true} viz={viz}/>
         <div className="patientCharts" id="patientChartsDiv" style={{display: "flex"}}></div>
-        <DataInput group="staff" enabled={false} viz={viz}/>
-        <div className="staffCharts" id="staffChartsDiv" style={{display: "none"}}></div> */}
-        <EnhancedDataInput group="patient" enabled={true} viz={viz} />
+        <EnhancedDataInput group="staff" enabled={false} viz={viz}/>
+        <div className="staffCharts" id="staffChartsDiv" style={{display: "none"}}></div>
         {/* <GraphvizChart src={"digraph { a -> b; }"} engine={"dot"} viz={viz} data="patient"/> */}
       </div>
     )
