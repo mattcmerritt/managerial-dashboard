@@ -78,7 +78,6 @@ class EnhancedDataInput extends Component {
     // saves edited dataset
     // button will need to be pressed to get to next step
     async SelectSteps(dataset) {
-        // TODO: reimplement selecting steps with the checkboxes
         const parentDiv = document.getElementById(this.props.group + "DataInSettings");
 
         // step 1: remove unecessary columns from the dataset
@@ -204,9 +203,45 @@ class EnhancedDataInput extends Component {
     // allowing the user to choose categories for each step
     // saves edited dataset
     async ClassifySteps(dataset) {
-        console.log("Classifying steps");
-        console.log(dataset);
+        const parentDiv = document.getElementById(this.props.group + "DataInSettings");
         // TODO: reimplement classifications with dropdown selections
+
+        const categories = ["care", "wait", "travel", "other"];
+
+        // creating the list of dropdowns
+        const stepList = document.createElement("ul");
+        stepList.id = "stepList";
+        stepList.style = "list-style: none";
+
+        for (let list of dataset) {
+            // building out the selection dropdowns
+            const item = document.createElement("li");
+
+            const dropdown = document.createElement("select");
+            dropdown.name = list.name;
+            dropdown.id = list.name + "-select";
+
+            // creating the options in the dropdown menus
+            for (const category of categories) {
+                const option = document.createElement("option");
+                option.value = category;
+                option.innerHTML = category.charAt(0).toUpperCase() + category.slice(1, category.length);
+
+                dropdown.appendChild(option);
+            }
+
+            const label = document.createElement("label");
+            label.for = list.name;
+            label.innerHTML = `${list.name}:`;
+
+            // putting the elements into the item, putting item into list
+            item.appendChild(dropdown);
+            item.appendChild(label);
+            stepList.appendChild(item);
+        }
+
+        parentDiv.appendChild(stepList);
+
         // saving dataset for next step in the process
         this.setState({dataset: dataset});
     }
