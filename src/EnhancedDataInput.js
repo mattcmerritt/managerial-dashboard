@@ -63,7 +63,9 @@ class EnhancedDataInput extends Component {
                 let dataCellAddress = colLetter + (currRow + 1);
                 let dataCell = worksheet[dataCellAddress];
                 let dataValue = (dataCell ? dataCell.v : undefined);
-                dataArray.push(dataValue);
+                if(dataValue != null) {
+                    dataArray.push(dataValue);
+                }
             }
 
             dataset.push(
@@ -498,8 +500,9 @@ class EnhancedDataInput extends Component {
 
             const charts = [
                 <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Patient Process Flow Diagram" />,
-                <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
-                <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group}/>,
+                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="wait" id="pie3" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
@@ -528,8 +531,9 @@ class EnhancedDataInput extends Component {
 
             const charts = [
                 <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Staff Process Flow Diagram" />,
-                <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
-                <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group}/>,
+                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="travel" id="pie3" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
