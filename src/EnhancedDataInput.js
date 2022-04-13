@@ -677,11 +677,24 @@ class EnhancedDataInput extends Component {
         }
         nodes += `end [shape="ellipse" label="End"]`;
 
-        let connections = `start -> `;
-        for(let i = 0; i < nodeMessages.length; i++) {
-            connections += `node${i}\n\tnode${i} -> `;
+        // mapping node0 to the name of first step and so on
+        const childMappings = {"End": "end"};
+        for (let i = 0; i < nodeMessages.length; i++) {
+            childMappings[dataset[i].name] = "node" + i;
         }
-        connections += `end`;
+
+        let connections = ``;
+        if (nodeMessages.length == 0) {
+            connections = `start -> end`;
+        }
+        else {
+            connections += `start -> node0`;
+            for (let i = 0; i < nodeMessages.length; i++) {
+                for (let j = 0; j < dataset[i].nextSteps.length; j++) {
+                    connections += `\n\tnode${i} -> ${childMappings[dataset[i].nextSteps[j]]}`;
+                }
+            }
+        }
 
         const dot = `digraph processFlow {\n\trankdir="LR"\n\tsize=17.5\n\tratio="compress"\n\t` + nodes + "\n\t" + connections + `\n}`;
 
