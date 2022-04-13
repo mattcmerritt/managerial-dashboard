@@ -360,8 +360,9 @@ class EnhancedDataInput extends Component {
 
             const charts = [
                 <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Patient Process Flow Diagram" />,
-                <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
-                <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group}/>,
+                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="wait" id="pie3" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
@@ -390,8 +391,9 @@ class EnhancedDataInput extends Component {
 
             const charts = [
                 <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Staff Process Flow Diagram" />,
-                <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
-                <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group}/>,
+                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pie" fields="travel" id="pie3" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,

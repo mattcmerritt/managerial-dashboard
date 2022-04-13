@@ -21,10 +21,18 @@ const Chart = (props) => {
         // Generate data needed for pie charts
 
         let waitMeans = [];
+        let careMeans = [];
+        let travelMeans = [];
+        let otherMeans = [];
         let waitMeanPercents = [];
         let waitNames = [];
+        let careNames = [];
+        let travelNames = [];
+        let otherNames = [];
         let waitMeanSum = 0;
         let careMeanSum = 0;
+        let travelMeanSum = 0;
+        let otherMeanSum = 0;
 
         // run through all of the data columns in the excel file
         for(const dataColumn of processedData) {
@@ -40,13 +48,27 @@ const Chart = (props) => {
                 waitMeanSum += mean;
                 waitMeans.push(mean);
             }
-            else {
+            else if (dataColumn.type === "care") {
+                careNames.push(dataColumn.name);
                 careMeanSum += mean;
+                careMeans.push(mean);
+            }
+            else if (dataColumn.type === "travel") {
+                travelNames.push(dataColumn.name);
+                travelMeanSum += mean;
+                travelMeans.push(mean);
+            }
+            else {
+                otherNames.push(dataColumn.name);
+                otherMeanSum += mean;
+                otherMeans.push(mean);
             }
         }
         // round sums to 2 decimal places
         waitMeanSum = Math.round(waitMeanSum * 100)/100;
         careMeanSum = Math.round(careMeanSum * 100)/100;
+        travelMeanSum = Math.round(travelMeanSum * 100)/100;
+        otherMeanSum = Math.round(otherMeanSum * 100)/100;
 
         // calculate percent each wait makes of all waiting, also round means now that we're done working with them
         for(let i = 0; i < waitMeans.length; i++) {
@@ -60,18 +82,18 @@ const Chart = (props) => {
         // -----------------------------------
         // Pick type of pie chart
 
-        if (props.fields === "wait+care") {
+        if (props.fields === "categories") {
             // to my knowledge, this one works
             data.push({
                 type: 'pie',
-                labels: ['Wait Time', 'Care Time'],
-                values: [waitMeanSum, careMeanSum],
-                text: ['Mean Wait Time', 'Mean Care Time'],
+                labels: ['Wait Time', 'Care Time', 'Travel Time', 'Other Time'],
+                values: [waitMeanSum, careMeanSum, travelMeanSum, otherMeanSum],
+                text: ['Mean Wait Time', 'Mean Care Time', 'Mean Travel Time', 'Mean Other Time'],
                 hovertemplate: "%{label}: <br>Mean Total Time (mins): %{value}"
             });  
             layout.title = "Time by Step Category";
         }
-        else if (props.fields === "action") {
+        else if (props.fields === "wait") {
             // should work too
             data.push({
                 type: 'pie',
@@ -81,6 +103,39 @@ const Chart = (props) => {
                 hovertemplate: "Step: %{label} <br>Mean Time (mins): %{value}"
             });
             layout.title = "Total Wait Time by Step";
+        }
+        else if (props.fields === "care") {
+            // should work too
+            data.push({
+                type: 'pie',
+                labels: careNames,
+                values: careMeans,
+                text: careNames,
+                hovertemplate: "Step: %{label} <br>Mean Time (mins): %{value}"
+            });
+            layout.title = "Total Care Time by Step";
+        }
+        else if (props.fields === "travel") {
+            // should work too
+            data.push({
+                type: 'pie',
+                labels: travelNames,
+                values: travelMeans,
+                text: travelNames,
+                hovertemplate: "Step: %{label} <br>Mean Time (mins): %{value}"
+            });
+            layout.title = "Total Travel Time by Step";
+        }
+        else if (props.fields === "other") {
+            // should work too
+            data.push({
+                type: 'pie',
+                labels: otherNames,
+                values: otherMeans,
+                text: otherNames,
+                hovertemplate: "Step: %{label} <br>Mean Time (mins): %{value}"
+            });
+            layout.title = "Total Other Time by Step";
         }
 
         // customize layout for pie charts
