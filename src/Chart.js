@@ -429,7 +429,7 @@ const Chart = (props) => {
                 // recommendations
                 let recText = "Recommendations could not be loaded.";
                 let recArray = JSON.parse(sessionStorage.getItem(props.source + "Recommendations"));
-                let recObj;
+                let recObj = {};
 
                 // finding recommendations object in array
                 for (let rec of recArray) {

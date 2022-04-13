@@ -143,7 +143,7 @@ class EnhancedDataInput extends Component {
 
         // making the parent checkbox check all of the child checkboxes
         allCheckbox.addEventListener("click", (e) => {
-            const newState = document.querySelector(`#outerList input[id="allFields"]`).checked;
+            const newState = parentDiv.querySelector(`#outerList input[id="allFields"]`).checked;
 
             for (let list of dataset) {
                 const checkbox = document.querySelector(`#fieldList input[id="${list.name}"]`);
