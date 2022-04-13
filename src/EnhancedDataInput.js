@@ -61,7 +61,9 @@ class EnhancedDataInput extends Component {
                 let dataCellAddress = colLetter + (currRow + 1);
                 let dataCell = worksheet[dataCellAddress];
                 let dataValue = (dataCell ? dataCell.v : undefined);
-                dataArray.push(dataValue);
+                if(dataValue != null) {
+                    dataArray.push(dataValue);
+                }
             }
 
             dataset.push(
