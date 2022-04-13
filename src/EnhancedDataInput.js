@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Chart from './Chart';
+import GraphvizChart from './GraphvizChart';
+import ReactDOM from 'react-dom';
 
 class EnhancedDataInput extends Component {
     constructor(props) {
@@ -15,6 +18,9 @@ class EnhancedDataInput extends Component {
         this.PerformStep = this.PerformStep.bind(this);
         this.ContinueProcess = this.ContinueProcess.bind(this);
         this.TerminateProcess = this.TerminateProcess.bind(this);
+        this.GenerateRecommendations = this.GenerateRecommendations.bind(this);
+        this.GenerateCharts = this.GenerateCharts.bind(this);
+        this.CreateProcessFlow = this.CreateProcessFlow.bind(this);
     }
 
     componentDidMount() {
@@ -280,7 +286,12 @@ class EnhancedDataInput extends Component {
         const settings = document.getElementById(this.props.group + "DataInSettings");
         settings.remove();
 
-        // TODO: create the graphs
+        // write dataset to session storage
+        sessionStorage.setItem(this.props.group + "Dataset", JSON.stringify(dataset));
+
+        // creating recommendations and generating the charts
+        this.GenerateRecommendations();
+        this.GenerateCharts();
     }
 
     // starting the loading process
@@ -333,6 +344,203 @@ class EnhancedDataInput extends Component {
     async ContinueProcess() {
         this.setState({current: this.state.current + 1});
         this.PerformStep(this.state.dataset);
+    }
+
+    // ---------- The code below is the generation of the charts and ----------
+    // ---------- writing the recommendations to show in the windows ----------
+    
+    // builds out the specific charts for the given dataset using the
+    // Chart and GraphvizChart components
+    async GenerateCharts() {
+        if (this.props.group === "patient") {
+            const dot = await this.CreateProcessFlow();
+
+            const charts = [
+                <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
+                <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group}/>,
+                <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Patient Process Flow Diagram" />,
+            ];
+    
+            let parentChartDiv;
+            const getParentChartDiv = new Promise((resolve, reject) => {
+                parentChartDiv = document.getElementById(this.props.group + "ChartsDiv");
+    
+                resolve();
+            });
+    
+            getParentChartDiv.then(() => {
+                for (let chart of charts) {
+                    let chartDiv = document.createElement("div");
+                    parentChartDiv.appendChild(chartDiv);
+        
+                    ReactDOM.render(chart, chartDiv);
+                }
+            });   
+        }
+        else if (this.props.group === "staff") {
+            const dot = await this.CreateProcessFlow();
+
+            const charts = [
+                <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
+                <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group}/>,
+                <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group}/>,
+                <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Staff Process Flow Diagram" />,
+            ];
+    
+            let parentChartDiv;
+            const getParentChartDiv = new Promise((resolve, reject) => {
+                parentChartDiv = document.getElementById(this.props.group + "ChartsDiv");
+    
+                resolve();
+            });
+    
+            getParentChartDiv.then(() => {
+                for (let chart of charts) {
+                    let chartDiv = document.createElement("div");
+                    parentChartDiv.appendChild(chartDiv);
+        
+                    ReactDOM.render(chart, chartDiv);
+                }
+            });
+        }
+    }
+
+    // adds the specific recommendations for the each chart in the dataset
+    async GenerateRecommendations() {
+        // create the recommendations
+        let recommendations = [];
+        if(this.props.group === "patient") {
+            recommendations.push({
+                id: "pie1",
+                genericRecommendation: "The patient is spending a considerable percent of their time waiting. See the other visualizations to find the steps responsible for the large wait.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pie2",
+                genericRecommendation: "This chart shows the percent of the total wait experienced by a patient each wait step is.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pillar1",
+                genericRecommendation: "There is a large range for the Provider step. It may be worth looking into what could be causing this range.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pillar2",
+                genericRecommendation: "Below you see a pillar chart. This first pillar chart will show the average overall time. \nThe bar will be broken to show how much time is spend in each location within the entire average time.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pillar3",
+                genericRecommendation: "Now after seeing that, we will look at the average total time as a percent. \nThe location with the largest percentage will be our first focus point.",
+                expertRecommendation: undefined
+            });
+        }
+        else if (this.props.group === "staff") {
+            recommendations.push({
+                id: "pie1",
+                genericRecommendation: "The staff is spending most of their time caring for patients.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pie2",
+                genericRecommendation: "Since there is only one wait step, there is not much to conclude here.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pillar1",
+                genericRecommendation: "Consider minimizing the range for the Walk Back step.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pillar2",
+                genericRecommendation: "Below you see a pillar chart. This first pillar chart will show the average overall time. \nThe bar will be broken to show how much time is spend in each location within the entire average time.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pillar3",
+                genericRecommendation: "This chart shows the average overall time of each step as a percent of the total time.",
+                expertRecommendation: undefined
+            });
+        }
+
+        if (sessionStorage.getItem("expertRecommendations") !== null) {
+            // check for expert recommendations
+            const expertRecs = JSON.parse(sessionStorage.getItem("expertRecommendations"));
+            
+            // getting the right set of recs (patient/staff)
+            let recSet;
+            for (let set of expertRecs) {
+                if (this.props.group === set.id) {
+                    recSet = set;
+                }
+            }
+
+            // overwriting undefined recommendations
+            for (let rec of recSet.recs) {
+                // find corresponding chart in recommendations array
+                for (let chart of recommendations) {
+                    if (chart.id === rec.chartId) {
+                        chart.expertRecommendation = rec.rec;
+                    }
+                }
+            }
+        }
+
+        // saving recommendations to session storage to access at chart generation
+        sessionStorage.setItem(this.props.group + "Recommendations", JSON.stringify(recommendations));
+    }
+
+    // builds a linear process flow diagram
+    async CreateProcessFlow() {
+        // load data from storage
+        const dataset = JSON.parse(sessionStorage.getItem(this.props.group + "Dataset"));
+        
+        // list of strings to use in the flowchart
+        let nodeMessages = [];
+
+        for(const column of dataset) {
+            // find mean (sum of all divided by number of elements)
+            let mean = 0;
+            for(const value of column.data) {
+                mean += value;
+            }
+            mean /= column.data.length;
+
+            // find standard deviation (s = sqrt(sum((actual - mean)^2)/(n-1)))
+            let numerator = 0;
+            for(let i = 0; i < column.data.length; i++) {
+                numerator += (column.data[i] - mean) ** 2;
+            }
+            let stdv = Math.sqrt(numerator/(column.data.length - 1));
+
+            nodeMessages.push(`${column.name}: \\n Mean Time: ${Math.round(mean * 100)/100} mins \\n Standard Deviation: ${Math.round(stdv * 100)/100} mins`);
+        }
+
+        let nodes = `start [shape="ellipse" label="Start"]`;
+        for(let i = 0; i < nodeMessages.length; i++) {
+            nodes += `node${i} [shape="rect" label="${nodeMessages[i]}"]\n\t\t`;
+        }
+        nodes += `end [shape="ellipse" label="End"]`;
+
+        let connections = `start -> `;
+        for(let i = 0; i < nodeMessages.length; i++) {
+            connections += `node${i}\n\t\tnode${i} -> `;
+        }
+        connections += `end`;
+
+        const dot = `digraph processFlow {\n\t\t` + nodes + connections + `\n\t}`;
+
+        return dot;
     }
 
     render() {
