@@ -292,6 +292,9 @@ class EnhancedDataInput extends Component {
         // creating recommendations and generating the charts
         this.GenerateRecommendations();
         this.GenerateCharts();
+
+        // debug
+        console.log(await this.CreateProcessFlow());
     }
 
     // starting the loading process
@@ -356,6 +359,7 @@ class EnhancedDataInput extends Component {
             const dot = await this.CreateProcessFlow();
 
             const charts = [
+                <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Patient Process Flow Diagram" />,
                 <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
                 <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
@@ -363,7 +367,6 @@ class EnhancedDataInput extends Component {
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group}/>,
-                <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Patient Process Flow Diagram" />,
             ];
     
             let parentChartDiv;
@@ -386,6 +389,7 @@ class EnhancedDataInput extends Component {
             const dot = await this.CreateProcessFlow();
 
             const charts = [
+                <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Staff Process Flow Diagram" />,
                 <Chart chartType="pie" fields="wait+care" id="pie1" source={this.props.group}/>,
                 <Chart chartType="pie" fields="action" id="pie2" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
@@ -393,7 +397,6 @@ class EnhancedDataInput extends Component {
                 <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group}/>,
                 <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group}/>,
-                <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Staff Process Flow Diagram" />,
             ];
     
             let parentChartDiv;
@@ -528,17 +531,17 @@ class EnhancedDataInput extends Component {
 
         let nodes = `start [shape="ellipse" label="Start"]`;
         for(let i = 0; i < nodeMessages.length; i++) {
-            nodes += `node${i} [shape="rect" label="${nodeMessages[i]}"]\n\t\t`;
+            nodes += `node${i} [shape="rect" label="${nodeMessages[i]}"]\n\t`;
         }
         nodes += `end [shape="ellipse" label="End"]`;
 
         let connections = `start -> `;
         for(let i = 0; i < nodeMessages.length; i++) {
-            connections += `node${i}\n\t\tnode${i} -> `;
+            connections += `node${i}\n\tnode${i} -> `;
         }
         connections += `end`;
 
-        const dot = `digraph processFlow {\n\t\t` + nodes + connections + `\n\t}`;
+        const dot = `digraph processFlow {\n\trankdir="LR"\n\tsize=17.5\n\tratio="compress"\n\t` + nodes + connections + `\n}`;
 
         return dot;
     }
