@@ -15,6 +15,8 @@ class EnhancedDataInput extends Component {
         this.RemoveUnchecked = this.RemoveUnchecked.bind(this);
         this.ClassifySteps = this.ClassifySteps.bind(this);
         this.AddCategories = this.AddCategories.bind(this);
+        this.OrderSteps = this.OrderSteps.bind(this);
+        this.SaveOrder = this.SaveOrder.bind(this);
         this.PerformStep = this.PerformStep.bind(this);
         this.ContinueProcess = this.ContinueProcess.bind(this);
         this.TerminateProcess = this.TerminateProcess.bind(this);
@@ -215,8 +217,7 @@ class EnhancedDataInput extends Component {
         const parentDiv = document.getElementById(this.props.group + "DataInSettings");
         const instructions = document.getElementById(this.props.group + "InputInstructions");
         instructions.innerHTML = "Please classify each step of the process based on what is taking place.";
-        // TODO: reimplement classifications with dropdown selections
-
+        
         const categories = ["care", "wait", "travel", "other"];
 
         // creating the list of dropdowns
@@ -277,6 +278,143 @@ class EnhancedDataInput extends Component {
         this.ContinueProcess();
     }
 
+    // allowing the user to choose which step leads to where for process flow
+    // saves edited dataset
+    async OrderSteps(dataset) {
+        const parentDiv = document.getElementById(this.props.group + "DataInSettings");
+        const instructions = document.getElementById(this.props.group + "InputInstructions");
+        instructions.innerHTML = "For each step in the process, please indicate how many and which step(s) it leads to.";
+        
+        // getting a list of all steps
+        const steps = ["Start"];
+        console.log(dataset);
+        for (const step of dataset) {
+            steps.push(step.name);
+        }
+        steps.push("End");
+
+        // creating the list of dropdowns
+        const stepList = document.createElement("ul");
+        stepList.id = "stepList";
+        stepList.style = "list-style: none";
+
+        let stepCount = 1;
+        for (let list of dataset) {
+            // building out the selection dropdowns
+            const item = document.createElement("li");
+            item.id = list.name + "-steps";
+
+            const label = document.createElement("label");
+            label.for = list.name;
+            label.innerHTML = `Step ${stepCount}, ${list.name}: `;
+
+            const nextInput = document.createElement("input");
+            nextInput.id = list.name + "-nextInput";
+            nextInput.type = "number";
+            nextInput.min = 1;
+            nextInput.max = steps.length - 1;
+            nextInput.value = 1;    // setting default value
+
+            const nextStepList = document.createElement("ul");
+            nextStepList.id = list.name + "-nextList";
+            nextStepList.style = "list-style: none";
+
+            // adding the first child box
+            const subitem = document.createElement("li");
+            const newSelect = document.createElement("select");
+            const selectLabel = document.createElement("label");
+            selectLabel.innerHTML = "Next Step: ";
+            
+            for (const step of steps) {
+                const option = document.createElement("option");
+                option.value = step;
+                option.innerHTML = step;
+
+                newSelect.appendChild(option);
+            }
+
+            // setting default selection to the one below it
+            newSelect.selectedIndex = stepCount + 1;
+            
+            // put in selection array
+            subitem.append(selectLabel);
+            subitem.appendChild(newSelect);
+            nextStepList.appendChild(subitem);
+
+            nextInput.addEventListener("change", () => {
+                const selections = Array.from(item.querySelectorAll("li"));
+
+                while (selections.length < nextInput.value) {
+                    // add new select
+                    const subitem = document.createElement("li");
+                    const newSelect = document.createElement("select");
+                    const selectLabel = document.createElement("label");
+                    selectLabel.innerHTML = "Next Step: ";
+                    
+                    for (const step of steps) {
+                        const option = document.createElement("option");
+                        option.value = step;
+                        option.innerHTML = step;
+
+                        newSelect.appendChild(option);
+                    }
+                    
+                    // put in selection array
+                    subitem.append(selectLabel);
+                    subitem.appendChild(newSelect);
+                    nextStepList.appendChild(subitem);
+                    selections.push(newSelect);
+                }
+
+                while (selections.length > nextInput.value) {
+                    // remove last select
+                    const removed = selections.pop();
+                    removed.remove();
+                }
+            });
+
+            // putting the elements into the item, putting item into list
+            item.appendChild(label);
+            item.appendChild(nextInput);
+            item.appendChild(nextStepList);
+            stepList.appendChild(item);
+
+            stepCount++;
+        }
+
+        parentDiv.appendChild(stepList);
+
+        // saving dataset for next step in the process
+        this.setState({dataset: dataset});
+    }
+
+    // based on the dropdown options, save the next steps to the dataset
+    // saves edited dataset
+    // should start next step without button
+    async SaveOrder(dataset) {
+        const parentDiv = document.getElementById(this.props.group + "DataInSettings");
+
+        // reading in the list of next steps, saving to property
+        for (let i = 0; i < dataset.length; i++) {
+            const listItem = parentDiv.querySelector(`#stepList li[id="${dataset[i].name + "-steps"}"]`);
+
+            const childNodeSelects = Array.from(listItem.querySelectorAll("select"));
+
+            const childNames = [];
+            for (const select of childNodeSelects) {
+                childNames.push(select.options[select.selectedIndex].value);
+            }
+            dataset[i].nextSteps = childNames;
+        }
+
+        // remove the lists for this step
+        parentDiv.removeChild(parentDiv.querySelector("#stepList"));
+
+        // save dataset, move on to next step
+        this.setState({dataset: dataset});
+        this.ContinueProcess();
+    }
+
     // method that ends the chain of method calls in the process
     async TerminateProcess(dataset) {
         // remove the button and settings div
@@ -316,7 +454,7 @@ class EnhancedDataInput extends Component {
         this.setState(
             {
                 current: 0, 
-                steps: [this.SelectSteps, this.RemoveUnchecked, this.ClassifySteps, this.AddCategories, this.TerminateProcess], 
+                steps: [this.SelectSteps, this.RemoveUnchecked, this.ClassifySteps, this.AddCategories, this.OrderSteps, this.SaveOrder, this.TerminateProcess], 
                 dataset: initialDataset
             }
         );
@@ -541,7 +679,7 @@ class EnhancedDataInput extends Component {
         }
         connections += `end`;
 
-        const dot = `digraph processFlow {\n\trankdir="LR"\n\tsize=17.5\n\tratio="compress"\n\t` + nodes + connections + `\n}`;
+        const dot = `digraph processFlow {\n\trankdir="LR"\n\tsize=17.5\n\tratio="compress"\n\t` + nodes + "\n\t" + connections + `\n}`;
 
         return dot;
     }
