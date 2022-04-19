@@ -83,12 +83,36 @@ const Chart = (props) => {
         // Pick type of pie chart
 
         if (props.fields === "categories") {
-            // to my knowledge, this one works
+            // figure out which categories actually have entries
+            let names = [];
+            let meanSums = [];
+            let hoverText = [];
+            if(waitMeanSum !== 0) {
+                names.push('Wait Time');
+                meanSums.push(waitMeanSum);
+                hoverText.push('Mean Wait Time');
+            }
+            if(careMeanSum !== 0) {
+                names.push('Care Time');
+                meanSums.push(careMeanSum);
+                hoverText.push('Mean Care Time');
+            }
+            if(travelMeanSum !== 0) {
+                names.push('Travel Time');
+                meanSums.push(travelMeanSum);
+                hoverText.push('Mean Travel Time');
+            }
+            if(otherMeanSum !== 0) {
+                names.push('Other Time');
+                meanSums.push(otherMeanSum);
+                hoverText.push('Mean Other Time');
+            }
+            // create visualization with nonempty entries
             data.push({
                 type: 'pie',
-                labels: ['Wait Time', 'Care Time', 'Travel Time', 'Other Time'],
-                values: [waitMeanSum, careMeanSum, travelMeanSum, otherMeanSum],
-                text: ['Mean Wait Time', 'Mean Care Time', 'Mean Travel Time', 'Mean Other Time'],
+                labels: names,
+                values: meanSums,
+                text: hoverText,
                 hovertemplate: "%{label}: <br>Mean Total Time (mins): %{value}"
             });  
             layout.title = "Time by Step Category";
