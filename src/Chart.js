@@ -244,7 +244,7 @@ const Chart = (props) => {
 
             layout.barmode = "stack";
             layout.title = "Mean Times by Step (mins)";
-            layout.yaxis = {title: "Mean (mins)"};
+            layout.yaxis = {title: "Mean (mins)", range: [0, meanSum]};
         }
         else if (props.fields === "stackedmeanpercents") {
             for(let i = 0; i < steps.length; i++) {
@@ -337,7 +337,7 @@ const Chart = (props) => {
 
             layoutBefore.barmode = "stack";
             layoutBefore.title = "Mean Times Before (mins)";
-            layoutBefore.yaxis = {title: "Mean (mins)"};
+            layoutBefore.yaxis = {title: "Mean (mins)", range: [0, meanSum]};
 
             layoutBefore.height = 400;
             layoutBefore.width = 400;
@@ -358,7 +358,7 @@ const Chart = (props) => {
 
             layoutAfter.barmode = "stack";
             layoutAfter.title = "Mean Times After (mins)";
-            layoutAfter.yaxis = {title: "Mean (mins)"};
+            layoutAfter.yaxis = {title: "Mean (mins)", range: [0, meanSum]};
 
             layoutAfter.height = 400;
             layoutAfter.width = 400;
@@ -380,7 +380,7 @@ const Chart = (props) => {
 
             layout.barmode = "stack";
             layout.title = "Mean Times by Step After Improvement (mins)";
-            layout.yaxis = {title: "Mean (mins)"};
+            layout.yaxis = {title: "Mean (mins)", range: [0, meanSum]};
         }
 
         // customize layout for pillar charts
