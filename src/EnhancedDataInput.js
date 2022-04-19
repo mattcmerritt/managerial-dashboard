@@ -571,7 +571,12 @@ class EnhancedDataInput extends Component {
             });
             recommendations.push({
                 id: "pie2",
-                genericRecommendation: "This chart shows the percent of the total wait experienced by a patient each wait step is.",
+                genericRecommendation: "This chart shows what percent of the total care time experienced by a patient each care step is.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pie3",
+                genericRecommendation: "This chart shows what percent of the total wait experienced by a patient each wait step is.",
                 expertRecommendation: undefined
             });
             recommendations.push({
@@ -598,7 +603,12 @@ class EnhancedDataInput extends Component {
             });
             recommendations.push({
                 id: "pie2",
-                genericRecommendation: "Since there is only one wait step, there is not much to conclude here.",
+                genericRecommendation: "This chart shows what percent of the total care time for a staff member each care step is.",
+                expertRecommendation: undefined
+            });
+            recommendations.push({
+                id: "pie3",
+                genericRecommendation: "This chart shows what percent of the total travel time for a staff member each travel step is.",
                 expertRecommendation: undefined
             });
             recommendations.push({
