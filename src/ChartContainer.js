@@ -231,7 +231,15 @@ class ChartContainer extends Component {
             connections += `start -> node0`;
             for (let i = 0; i < nodeMessages.length; i++) {
                 for (let j = 0; j < dataset[i].nextSteps.length; j++) {
-                    connections += `\n\tnode${i} -> ${childMappings[dataset[i].nextSteps[j]]}`;
+                    // find end step
+                    let nextList;
+                    for (const list of dataset) {
+                        if (list.name === dataset[i].nextSteps[j]) {
+                            nextList = list;
+                        }
+                    }
+
+                    connections += `\n\tnode${i} -> ${childMappings[dataset[i].nextSteps[j]]} ${nextList !== undefined ? `[label="${Math.round(nextList.data.length / dataset[i].data.length * 100)}%"]` : ""}`;
                 }
             }
         }
