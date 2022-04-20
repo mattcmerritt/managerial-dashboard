@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import DatasetLoader from './DatasetLoader';
 
 import EnhancedDataInput from "./EnhancedDataInput";
 
@@ -50,7 +51,7 @@ class InputSelection extends Component {
 
         const chartDiv = <div className={this.group + "Charts"} id={this.group + "ChartsDiv"} style={true ? {display: "flex"} : {display: "none"}} />;
 
-        const item = <p>This is temporary</p>;
+        const item = <DatasetLoader group={this.group} viz={this.viz} />;
 
         ReactDOM.render(item, div1);
         ReactDOM.render(chartDiv, div2);
