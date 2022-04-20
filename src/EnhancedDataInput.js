@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chart from './Chart';
 import GraphvizChart from './GraphvizChart';
 import ReactDOM from 'react-dom';
+import ExportData from './ExportData';
 
 class EnhancedDataInput extends Component {
     constructor(props) {
@@ -524,7 +525,11 @@ class EnhancedDataInput extends Component {
         
                     ReactDOM.render(chart, chartDiv);
                 }
-            });   
+            }); 
+            
+            // adding the data exporter
+            const dataExporter = <ExportData group={this.props.group} />;
+            ReactDOM.render(dataExporter, parentChartDiv);
         }
         else if (this.props.group === "staff") {
             const dot = await this.CreateProcessFlow();
@@ -556,6 +561,10 @@ class EnhancedDataInput extends Component {
                     ReactDOM.render(chart, chartDiv);
                 }
             });
+            
+            // adding the data exporter
+            const dataExporter = <ExportData group={this.props.group} />;
+            ReactDOM.render(dataExporter, parentChartDiv);
         }
     }
 
