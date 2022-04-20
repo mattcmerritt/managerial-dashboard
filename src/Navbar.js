@@ -12,11 +12,13 @@ class Navbar extends Component {
 
     switchView() {
 
-        let title, patientIn, patientCharts, staffIn, staffCharts;
+        let title, patientParent, patientIn, patientCharts, staffParent, staffIn, staffCharts;
         const ActiveView = new Promise((resolve, reject) => {
             title = document.getElementById("title");
+            patientParent = document.getElementById("patientInputSelect");
             patientIn = document.getElementsByClassName("patientDataIn")[0];
             patientCharts = document.getElementById("patientChartsDiv");
+            staffParent = document.getElementById("staffInputSelect");
             staffIn = document.getElementsByClassName("staffDataIn")[0];
             staffCharts = document.getElementById("staffChartsDiv");
 
@@ -24,28 +26,41 @@ class Navbar extends Component {
         });
         
         ActiveView.then(() => {
-            if (patientCharts.style.display === "flex") {
+            if (patientParent.style.display === "block") {
                 title.innerHTML = "Managerial Dashboard - Staff Data";
+                patientParent.style.display = "none";
                 if (patientIn !== undefined) {
                     patientIn.style.display = "none";
                 }
-                patientCharts.style.display = "none";
-
+                if (patientCharts !== undefined && patientCharts !== null) {
+                    patientCharts.style.display = "none";
+                }
+                
+                staffParent.style.display = "block";
                 if (staffIn !== undefined) {
                     staffIn.style.display = "block";
                 }
-                staffCharts.style.display = "flex";
+                if (staffCharts !== undefined && staffCharts !== null)
+                {
+                    staffCharts.style.display = "flex";
+                }
             } else {
                 title.innerHTML = "Managerial Dashboard - Patient Data";
+                patientParent.style.display = "block";
                 if (patientIn !== undefined) {
                     patientIn.style.display = "block";
                 }
-                patientCharts.style.display = "flex";
-
+                if (patientCharts !== undefined && patientCharts !== null) {
+                    patientCharts.style.display = "flex";
+                }
+                
+                staffParent.style.display = "none";
                 if (staffIn !== undefined) {
                     staffIn.style.display = "none";
                 }
-                staffCharts.style.display = "none";
+                if (staffCharts !== undefined && staffCharts !== null) {
+                    staffCharts.style.display = "none";
+                }
             }
         });
     }
