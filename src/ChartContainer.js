@@ -3,6 +3,7 @@ import Chart from './Chart';
 import GraphvizChart from './GraphvizChart';
 import ExportData from './ExportData';
 import ReactDOM from 'react-dom';
+import AdditionalDataInput from './AdditionalDataInput';
 
 class ChartContainer extends Component {
     constructor(props) {
@@ -49,8 +50,18 @@ class ChartContainer extends Component {
             }); 
             
             // adding the data exporter
+            const temp = document.createElement("div");
+            parentChartDiv.appendChild(temp);
+
             const dataExporter = <ExportData group={this.props.group} />;
-            ReactDOM.render(dataExporter, parentChartDiv);
+            ReactDOM.render(dataExporter, temp);
+
+            // adding the additional data input option
+            const temp2 = document.createElement("div");
+            parentChartDiv.appendChild(temp2);
+            
+            const additionalData = <AdditionalDataInput group={this.props.group} viz={this.props.viz} />;
+            ReactDOM.render(additionalData, temp2);
         }
         else if (this.props.group === "staff") {
             const dot = await this.CreateProcessFlow();
@@ -84,8 +95,18 @@ class ChartContainer extends Component {
             });
             
             // adding the data exporter
+            const temp = document.createElement("div");
+            parentChartDiv.appendChild(temp);
+
             const dataExporter = <ExportData group={this.props.group} />;
-            ReactDOM.render(dataExporter, parentChartDiv);
+            ReactDOM.render(dataExporter, temp);
+
+            // adding the additional data input option
+            const temp2 = document.createElement("div");
+            parentChartDiv.appendChild(temp2);
+            
+            const additionalData = <AdditionalDataInput group={this.props.group} viz={this.props.viz} />;
+            ReactDOM.render(additionalData, temp2);
         }
     }
 

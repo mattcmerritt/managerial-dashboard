@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ChartContainer from './ChartContainer';
 import ReactDOM from 'react-dom';
 
-class DatasetLoader extends Component {
+class DatasetAdder extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -11,32 +11,12 @@ class DatasetLoader extends Component {
         this.viz = props.viz;
         this.XLSX = null;
 
-        this.LoadOldDataset = this.LoadOldDataset.bind(this);
         this.LoadNewDataset = this.LoadNewDataset.bind(this);
         this.ShowCharts = this.ShowCharts.bind(this);
     }
 
     componentDidMount() {
         this.XLSX = require("xlsx");
-    }
-
-    async LoadOldDataset(e) {
-        let fileContents;
-        const fileReader = new FileReader();
-        fileReader.onload = (e) => {
-            fileContents = fileReader.result;
-
-            // removing the reloader
-            const parentDiv = document.getElementById(this.group + "Reloader");
-            parentDiv.remove();
-            const datasetLoaded = document.getElementById(this.group + "Reloaded");
-            datasetLoaded.style.display = "block";
-
-            // storing dataset loaded from previous file
-            const oldDataset = JSON.parse(fileContents);
-            this.setState({startingDataset: oldDataset}, this.ShowCharts);
-        }
-        fileReader.readAsText(e.target.files[0]);
     }
 
     async LoadNewDataset(e) {
@@ -85,37 +65,50 @@ class DatasetLoader extends Component {
     }
 
     async ShowCharts() {
-        if (this.state.startingDataset !== undefined && this.state.newDataset !== undefined)
+        if (this.state.newDataset !== undefined)
         {
-            // merge datasets together
-            const mergedDataset = this.state.startingDataset;
+            // grab old dataset
+            const oldDataset = JSON.parse(sessionStorage.getItem(this.group + "Dataset"));
 
-            for (const list of mergedDataset) {
-                // find the list in the new dataset
-                let additonalData;
-                for (const newList of this.state.newDataset) {
-                    if (newList.name === list.name) {
-                        additonalData = newList.data;
+            const newDataset = [];
+
+            // adding empty lists with connections and categories to new dataset
+            for (const list of oldDataset) {
+                list.data = [];
+                newDataset.push(list);
+            }
+
+            // putting items into the proper lists
+            for (const loadList of this.state.newDataset) {
+                for (const list of newDataset) {
+                    if (list.name === loadList.name) {
+                        list.data = loadList.data;
                     }
-                }
-
-                // adding the new points to the end of what was already there
-                for (const point of additonalData) {
-                    list.data.push(point);
                 }
             }
 
-            // saving dataset to storage
-            sessionStorage.setItem(this.group + "Dataset", JSON.stringify(mergedDataset));
+            console.log(newDataset);
 
-            // creating the charts
+            // saving datasets to storage
+            let datasets = JSON.parse(sessionStorage.getItem(this.group + "Datasets"));
+            if (datasets === null) {
+                datasets = [oldDataset, newDataset];
+            }
+            else {
+                datasets.push(newDataset);
+            }
+            sessionStorage.setItem(this.group + "Datasets", JSON.stringify(datasets));
+            // overwrite current dataset with the newest
+            sessionStorage.setItem(this.group + "Dataset", JSON.stringify(newDataset));
+
+            // creating the charts for the newest dataset
             const charts = <ChartContainer group={this.group} viz={this.viz} />;
-            const inputSelectDiv = document.getElementById(this.group + "InputSelect");
+            const additionalDataDiv = document.getElementById(this.group + "AdditionalData");
             const emptyDiv = document.createElement("div");
-            inputSelectDiv.appendChild(emptyDiv);
+            additionalDataDiv.appendChild(emptyDiv);
             ReactDOM.render(charts, emptyDiv);
 
-            // removing this loader
+            // // removing this loader
             const parentDiv = document.getElementById(this.group + "DatasetLoader");
             parentDiv.remove();
         }
@@ -124,11 +117,6 @@ class DatasetLoader extends Component {
     render() {
         return (
             <div id={this.group + "DatasetLoader"}>
-                <div id={this.group + "Reloader"}>
-                    <label htmlFor={this.group + "ReloadForm"}>Select dataset to load: </label>
-                    <input type="file" id={this.group + "ReloadForm"} onChange={this.LoadOldDataset} accept=".txt" />
-                </div>
-                <p id={this.group + "Reloaded"} style={{display: "none"}}>Previous dataset loaded!</p> 
                 <div id={this.group + "LoaderNew"}>
                     <label htmlFor={this.group + "ReloadForm"}>Select new data to load: </label>
                     <input type="file" id={this.group + "ReloadForm"} onChange={this.LoadNewDataset} accept=".xlsx" />
@@ -138,4 +126,4 @@ class DatasetLoader extends Component {
     }
 }
 
-export default DatasetLoader;
+export default DatasetAdder;

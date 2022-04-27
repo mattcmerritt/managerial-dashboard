@@ -12,13 +12,17 @@ class Navbar extends Component {
 
     switchView() {
 
-        let title, patientParent, patientIn, patientCharts, staffParent, staffIn, staffCharts;
+        let title, patientParent, altPatientParent, patientIn, patientCharts, altStaffParent, staffParent, staffIn, staffCharts;
         const ActiveView = new Promise((resolve, reject) => {
             title = document.getElementById("title");
+
             patientParent = document.getElementById("patientInputSelect");
+            altPatientParent = document.getElementById("patientAdditionalData");
             patientIn = document.getElementsByClassName("patientDataIn")[0];
             patientCharts = document.getElementById("patientChartsDiv");
+            
             staffParent = document.getElementById("staffInputSelect");
+            altStaffParent = document.getElementById("staffAdditionalData");
             staffIn = document.getElementsByClassName("staffDataIn")[0];
             staffCharts = document.getElementById("staffChartsDiv");
 
@@ -26,9 +30,14 @@ class Navbar extends Component {
         });
         
         ActiveView.then(() => {
-            if (patientParent.style.display === "block") {
+            if (title.innerHTML.toLowerCase().indexOf("patient") !== -1) {
                 title.innerHTML = "Managerial Dashboard - Staff Data";
-                patientParent.style.display = "none";
+                if (patientParent !== undefined && patientParent !== null) {
+                    patientParent.style.display = "none";
+                }
+                if (altPatientParent !== undefined && altPatientParent !== null) {
+                    altPatientParent.style.display = "none";
+                }
                 if (patientIn !== undefined) {
                     patientIn.style.display = "none";
                 }
@@ -36,7 +45,12 @@ class Navbar extends Component {
                     patientCharts.style.display = "none";
                 }
                 
-                staffParent.style.display = "block";
+                if (staffParent !== undefined && staffParent !== null) {
+                    staffParent.style.display = "block";
+                }
+                if (altStaffParent !== undefined && altStaffParent !== null) {
+                    altStaffParent.style.display = "block";
+                }
                 if (staffIn !== undefined) {
                     staffIn.style.display = "block";
                 }
@@ -46,7 +60,12 @@ class Navbar extends Component {
                 }
             } else {
                 title.innerHTML = "Managerial Dashboard - Patient Data";
-                patientParent.style.display = "block";
+                if (patientParent !== undefined && patientParent !== null) {
+                    patientParent.style.display = "block";
+                }
+                if (altPatientParent !== undefined && altPatientParent !== null) {
+                    altPatientParent.style.display = "block";
+                }
                 if (patientIn !== undefined) {
                     patientIn.style.display = "block";
                 }
@@ -54,7 +73,12 @@ class Navbar extends Component {
                     patientCharts.style.display = "flex";
                 }
                 
-                staffParent.style.display = "none";
+                if (staffParent !== undefined && staffParent !== null) {
+                    staffParent.style.display = "none";
+                }
+                if (altStaffParent !== undefined && altStaffParent !== null) {
+                    altStaffParent.style.display = "none";
+                }
                 if (staffIn !== undefined) {
                     staffIn.style.display = "none";
                 }
