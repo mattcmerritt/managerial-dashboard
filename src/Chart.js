@@ -13,7 +13,14 @@ const Chart = (props) => {
     let layoutAfter = {};
 
     // read in data from excel
-    let processedData = JSON.parse(sessionStorage.getItem(props.source + "Dataset"));
+    let processedData;
+    if (props.datasetIndex === undefined || props.datasetIndex === -1) {
+        processedData = JSON.parse(sessionStorage.getItem(props.source + "Dataset")); // use the current dataset
+    }
+    else {
+        const ds = JSON.parse(sessionStorage.getItem(props.source + "Datasets"));
+        processedData = ds[props.datasetIndex]; // use the specified dataset index
+    }
 
     if (props.chartType === "pie") {
         
@@ -438,14 +445,33 @@ const Chart = (props) => {
         document.body.appendChild(modal);
     }
 
-    // this is the proper return
-    return (
-        <div className="graphWindow" id={props.id}>
-            <Plot data = {data}
+    let compareButton;
+    let recButton;
+    if (!props.noButtons) {
+        if (JSON.parse(sessionStorage.getItem(props.source + "Datasets")) !== null) {
+            compareButton = <button 
+                onClick={() => {
+                    const plot = [
+                        <Chart chartType={props.chartType} fields={props.fields} id={props.id} source={props.source} datasetIndex={0} noButtons={true}/>,
+                        <Chart chartType={props.chartType} fields={props.fields} id={props.id} source={props.source} datasetIndex={-1} noButtons={true}/>,
+                    ];
+    
+                    const content = document.createElement("div");
+                    const modalCharts = document.createElement("div");
+                    modalCharts.style.display = "flex";
+                    content.appendChild(modalCharts);
+    
+                    ReactDOM.render(plot, modalCharts);
+    
+                    CreateModal(layout.title.text, content);
+    
+                }} style={{display : "inline-block"}}>
+                    Compare
+                </button>;
+        }
 
-            layout = {layout}
-            />
-            <button 
+        // making the rec button
+        recButton = <button 
             onClick={() => {
                 let text = document.createElement("p");
                 text.style.display = "inline-block";
@@ -491,9 +517,23 @@ const Chart = (props) => {
 
                 CreateModal(layout.title.text, content);
 
-            }} style={{display : "inline-block"}}>
-                Show Recommendation
-            </button>
+        }} style={{display : "inline-block"}}>
+            Show Recommendation
+        </button>
+    }
+
+    // this is the proper return
+    return (
+        <div className="graphWindow" id={props.id}>
+            <Plot data = {data}
+
+            layout = {layout}
+            />
+            
+            {/* -- buttons that are drawn conditionally -- */}
+            {recButton}
+            {compareButton}
+
             <br />
             <label htmlFor={props.source + "-" + props.id + "-expert-rec-in"} id={props.source + "-" + props.id + "-expert-rec-in-label"} style={sessionStorage.getItem("expertView") ? {display: "block"} : {display: "none"}}>Input Expert Recommendation:</label>
             <textarea id={props.source + "-" + props.id + "-expert-rec-in"} name={props.source + "-" + props.id + "-expert-rec-in"} rows="2" cols="40" style={sessionStorage.getItem("expertView") ? {display: "block"} : {display: "none"}}/>
