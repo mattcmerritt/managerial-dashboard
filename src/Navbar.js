@@ -17,12 +17,12 @@ class Navbar extends Component {
             title = document.getElementById("title");
 
             patientParent = document.getElementById("patientInputSelect");
-            altPatientParent = document.getElementById("patientAdditionalData");
+            altPatientParent = document.getElementsByClassName("patientAdditionalData")[0];
             patientIn = document.getElementsByClassName("patientDataIn")[0];
             patientCharts = document.getElementById("patientChartsDiv");
             
             staffParent = document.getElementById("staffInputSelect");
-            altStaffParent = document.getElementById("staffAdditionalData");
+            altStaffParent = document.getElementsByClassName("staffAdditionalData")[0];
             staffIn = document.getElementsByClassName("staffDataIn")[0];
             staffCharts = document.getElementById("staffChartsDiv");
 

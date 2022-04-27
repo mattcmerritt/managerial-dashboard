@@ -103,7 +103,7 @@ class DatasetAdder extends Component {
 
             // creating the charts for the newest dataset
             const charts = <ChartContainer group={this.group} viz={this.viz} />;
-            const additionalDataDiv = document.getElementById(this.group + "AdditionalData");
+            const additionalDataDiv = document.getElementsByClassName(this.group + "AdditionalData")[0];
             const emptyDiv = document.createElement("div");
             additionalDataDiv.appendChild(emptyDiv);
             ReactDOM.render(charts, emptyDiv);
