@@ -68,7 +68,7 @@ class DatasetAdder extends Component {
         if (this.state.newDataset !== undefined)
         {
             // grab old dataset
-            const oldDataset = JSON.parse(sessionStorage.getItem(this.group + "Dataset"));
+            let oldDataset = JSON.parse(sessionStorage.getItem(this.group + "Dataset"));
 
             const newDataset = [];
 
@@ -88,6 +88,9 @@ class DatasetAdder extends Component {
             }
 
             console.log(newDataset);
+
+            // retrieving old dataset (was destroyed)
+            oldDataset = JSON.parse(sessionStorage.getItem(this.group + "Dataset"));
 
             // saving datasets to storage
             let datasets = JSON.parse(sessionStorage.getItem(this.group + "Datasets"));
