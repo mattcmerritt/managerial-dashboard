@@ -76,7 +76,7 @@
   flex-wrap: wrap;
 }
 
-.graphWindow, .processFlow {
+.App .graphWindow, .App .processFlow {
   -webkit-box-shadow: 0px 12px 18px -6px rgba(0,0,0,0.3);
   box-shadow: 0px 12px 18px -6px rgba(0,0,0,0.3);
 
@@ -173,4 +173,16 @@ nav * {
   line-height: 1.5;
   justify-content: center;
   text-align: left;
+}
+
+.modal__content .graphWindow {
+  margin: 20px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
 }
