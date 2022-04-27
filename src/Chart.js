@@ -522,6 +522,15 @@ const Chart = (props) => {
         </button>
     }
 
+    if(props.noButtons) {
+        if(props.datasetIndex === -1) {
+            layout.title = "Recent " + layout.title;
+        }
+        else {
+            layout.title = "Initial " + layout.title;
+        }
+    }
+
     // this is the proper return
     return (
         <div className="graphWindow" id={props.id}>
