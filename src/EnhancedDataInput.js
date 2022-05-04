@@ -584,11 +584,9 @@ class EnhancedDataInput extends Component {
                 "saturday": 6,
             }
             for (let i = 0; i < fields["day"].length - 1; i++) {
-                console.log("sorting");
                 let min = i;
                 for (let j = i + 1; j < fields["day"].length; j++) {
-                    console.log(`${dayWeights[fields["day"][j].toLowerCase()]} < ${dayWeights[fields["day"][i].toLowerCase()]} = ${dayWeights[fields["day"][j].toLowerCase()] < dayWeights[fields["day"][i].toLowerCase()]}`);
-                    if (dayWeights[fields["day"][j].toLowerCase()] < dayWeights[fields["day"][i].toLowerCase()]) {
+                    if (dayWeights[fields["day"][j].toLowerCase()] < dayWeights[fields["day"][min].toLowerCase()]) {
                         min = j;
                     }
                 }
@@ -596,8 +594,6 @@ class EnhancedDataInput extends Component {
                 fields["day"][i] = fields["day"][min];
                 fields["day"][min] = temp;
             }
-
-            console.log(fields["day"]);
 
             return fields;
         }

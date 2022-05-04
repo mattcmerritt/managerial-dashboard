@@ -127,6 +127,40 @@ class ComparisonChart extends Component {
                 means.push(sums[i] / counts[i]);
             }
 
+            // sorting the days
+            const dayWeights = {
+                "sunday": 0,
+                "monday": 1,
+                "tuesday": 2,
+                "wednesday": 3,
+                "thursday": 4,
+                "friday": 5,
+                "saturday": 6,
+            }
+            for (let i = 0; i < days.length - 1; i++) {
+                let min = i;
+                for (let j = i + 1; j < days.length; j++) {
+                    if (dayWeights[days[j].toLowerCase()] < dayWeights[days[min].toLowerCase()]) {
+                        min = j;
+                    }
+                }
+                let temp = days[i];
+                days[i] = days[min];
+                days[min] = temp;
+
+                temp = sums[i];
+                sums[i] = sums[min];
+                sums[min] = temp;
+
+                temp = counts[i];
+                counts[i] = counts[min];
+                counts[min] = temp;
+
+                temp = means[i];
+                means[i] = means[min];
+                means[min] = temp;
+            }
+
             data.push({
                 type: 'bar',
                 x: days, 
