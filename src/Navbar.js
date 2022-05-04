@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {activeView: "patient", viewIndex: 0};
+
+        this.views = ["patient", "staff"];
+
+        this.switchView = this.switchView.bind(this);
     }
 
     componentDidMount() {
@@ -11,82 +15,44 @@ class Navbar extends Component {
     }
 
     switchView() {
+        // list of elements to find and either show or hide
+        const componentNames = [
+            { type: "#", id: "InputSelect", style: "block" },
+            { type: ".", id: "AdditionalData", style: "block" },
+            { type: ".", id: "DataIn", style: "block" },
+            { type: "#", id: "ChartsDiv", style: "flex" },
+        ];
 
-        let title, patientParent, altPatientParent, patientIn, patientCharts, altStaffParent, staffParent, staffIn, staffCharts;
-        const ActiveView = new Promise((resolve, reject) => {
-            title = document.getElementById("title");
+        const updateView = () => {
+            // updating the title
+            const title = document.getElementById("title");
+            let viewTitle;
+            if (this.state.activeView === "patient") {
+                viewTitle = "Patient Data";
+            }
+            else if (this.state.activeView === "staff") {
+                viewTitle = "Staff Data";
+            }
+            title.innerHTML = `Managerial Dashboard - ${viewTitle}`;
 
-            patientParent = document.getElementById("patientInputSelect");
-            altPatientParent = document.getElementsByClassName("patientAdditionalData")[0];
-            patientIn = document.getElementsByClassName("patientDataIn")[0];
-            patientCharts = document.getElementById("patientChartsDiv");
-            
-            staffParent = document.getElementById("staffInputSelect");
-            altStaffParent = document.getElementsByClassName("staffAdditionalData")[0];
-            staffIn = document.getElementsByClassName("staffDataIn")[0];
-            staffCharts = document.getElementById("staffChartsDiv");
-
-            resolve();
-        });
-        
-        ActiveView.then(() => {
-            if (title.innerHTML.toLowerCase().indexOf("patient") !== -1) {
-                title.innerHTML = "Managerial Dashboard - Staff Data";
-                if (patientParent !== undefined && patientParent !== null) {
-                    patientParent.style.display = "none";
-                }
-                if (altPatientParent !== undefined && altPatientParent !== null) {
-                    altPatientParent.style.display = "none";
-                }
-                if (patientIn !== undefined) {
-                    patientIn.style.display = "none";
-                }
-                if (patientCharts !== undefined && patientCharts !== null) {
-                    patientCharts.style.display = "none";
-                }
-                
-                if (staffParent !== undefined && staffParent !== null) {
-                    staffParent.style.display = "block";
-                }
-                if (altStaffParent !== undefined && altStaffParent !== null) {
-                    altStaffParent.style.display = "block";
-                }
-                if (staffIn !== undefined) {
-                    staffIn.style.display = "block";
-                }
-                if (staffCharts !== undefined && staffCharts !== null)
-                {
-                    staffCharts.style.display = "flex";
-                }
-            } else {
-                title.innerHTML = "Managerial Dashboard - Patient Data";
-                if (patientParent !== undefined && patientParent !== null) {
-                    patientParent.style.display = "block";
-                }
-                if (altPatientParent !== undefined && altPatientParent !== null) {
-                    altPatientParent.style.display = "block";
-                }
-                if (patientIn !== undefined) {
-                    patientIn.style.display = "block";
-                }
-                if (patientCharts !== undefined && patientCharts !== null) {
-                    patientCharts.style.display = "flex";
-                }
-                
-                if (staffParent !== undefined && staffParent !== null) {
-                    staffParent.style.display = "none";
-                }
-                if (altStaffParent !== undefined && altStaffParent !== null) {
-                    altStaffParent.style.display = "none";
-                }
-                if (staffIn !== undefined) {
-                    staffIn.style.display = "none";
-                }
-                if (staffCharts !== undefined && staffCharts !== null) {
-                    staffCharts.style.display = "none";
+            // going though each view and enabling/disabling any elements found based on the active view
+            for (const view of this.views) {
+                for (const componentName of componentNames) {
+                    const element = document.querySelector(componentNames.type + view + componentName.id);
+                    if (element !== undefined && element !== null) {
+                        if (view === this.state.active) {
+                            element.style.display = componentName.style;
+                        }
+                        else {
+                            element.style.display = "none";
+                        }
+                    }
                 }
             }
-        });
+        };
+
+        // changing the active view
+        this.setState({activeView: this.views[(this.state.viewIndex + 1) % this.views.length], viewIndex: this.state.viewIndex + 1}, updateView);
     }
 
     loadRecFromFile(e) {
