@@ -2,6 +2,8 @@
 
 This project is a React web application that is intended to visualize data collected from hospitals to identify areas for improvement in the patient and staff experiences. The application takes in data from a spreadsheet that indicates how much time a given patient or nurse spends at each step in the process, and generates a process flow diagram as well as a couple of other visualizations with recommendations. Users are able to load different datasets for separate intervals of time, and they are able to view the changes that have occured and receive recommendations on how to improve the patient and staff experiences.
 
+A build of the web application can be found [here](https://mattcmerritt.github.io/managerial-dashboard/).
+
 ## Functionality
 Upon opening the application, the user will see a couple of controls at the top of the screen for changing between the patient and staff data views, as well as buttons to write, load, and save expert recommendations. The user should also be prompted to either load in a new dataset by selecting "First time" or add onto an existing dataset using "Returning user".
 
