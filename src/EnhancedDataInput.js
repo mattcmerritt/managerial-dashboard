@@ -573,6 +573,32 @@ class EnhancedDataInput extends Component {
                 }
             }
 
+            // sorting the days
+            const dayWeights = {
+                "sunday": 0,
+                "monday": 1,
+                "tuesday": 2,
+                "wednesday": 3,
+                "thursday": 4,
+                "friday": 5,
+                "saturday": 6,
+            }
+            for (let i = 0; i < fields["day"].length - 1; i++) {
+                console.log("sorting");
+                let min = i;
+                for (let j = i + 1; j < fields["day"].length; j++) {
+                    console.log(`${dayWeights[fields["day"][j].toLowerCase()]} < ${dayWeights[fields["day"][i].toLowerCase()]} = ${dayWeights[fields["day"][j].toLowerCase()] < dayWeights[fields["day"][i].toLowerCase()]}`);
+                    if (dayWeights[fields["day"][j].toLowerCase()] < dayWeights[fields["day"][i].toLowerCase()]) {
+                        min = j;
+                    }
+                }
+                const temp = fields["day"][i];
+                fields["day"][i] = fields["day"][min];
+                fields["day"][min] = temp;
+            }
+
+            console.log(fields["day"]);
+
             return fields;
         }
     }

@@ -4,6 +4,7 @@ import GraphvizChart from './GraphvizChart';
 import ExportData from './ExportData';
 import ReactDOM from 'react-dom';
 import AdditionalDataInput from './AdditionalDataInput';
+import ComparisonChart from './ComparisonChart';
 
 class ChartContainer extends Component {
     constructor(props) {
@@ -109,7 +110,31 @@ class ChartContainer extends Component {
             ReactDOM.render(additionalData, temp2);
         }
         else if (this.props.group === "staffCompare") {
+            // grabbing the list of unique values
+            const values = JSON.parse(sessionStorage.getItem(this.props.group + "Values"));
+
+            // generating a chart for each unique value
             const charts = [];
+
+            // task-focused charts
+            for (const task of values["task"]) {
+                const chart = <ComparisonChart fields="taskfocus" focus={task} id={"task" + task}/>;
+                charts.push(chart);
+            }
+            // day-focused charts
+            for (const day of values["day"]) {
+                const chart = <ComparisonChart fields="dayfocus" focus={day} id={"day" + day}/>;
+                charts.push(chart);
+            }
+            // individual performance per task over the week
+            for (const task of values["task"]) {
+                for (const member of values["staff member"]) {
+                    const chart = <ComparisonChart fields="persontask" focus={member} subfocus={task} id={member + task}/>;
+                    charts.push(chart);
+                }
+            }
+
+            console.log(charts);
     
             // rendering the charts
             let parentChartDiv;

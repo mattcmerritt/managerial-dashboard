@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Plot from 'react-plotly.js';
-import ReactDOM from 'react-dom';
 
 class ComparisonChart extends Component {
     constructor(props) {
@@ -42,7 +41,7 @@ class ComparisonChart extends Component {
             let counts = [];
             let means = [];
 
-            for(const point of relevantDataset) {
+            for(const point of relevantData) {
                 if(staff.includes(point["staff member"])) {
                     sums[staff.indexOf(point["staff member"])] += point["duration"];
                     counts[staff.indexOf(point["staff member"])]++;
@@ -76,14 +75,14 @@ class ComparisonChart extends Component {
             let counts = [];
             let means = [];
 
-            for(const point of relevantDataset) {
-                if(staff.includes(point["task"])) {
-                    sums[staff.indexOf(point["task"])] += point["duration"];
-                    counts[staff.indexOf(point["task"])]++;
+            for(const point of relevantData) {
+                if(tasks.includes(point["task"])) {
+                    sums[tasks.indexOf(point["task"])] += point["duration"];
+                    counts[tasks.indexOf(point["task"])]++;
                 }
                 else {
                     // first datapoint for a task, so start new entry in arrays
-                    staff.push(point["task"]);
+                    tasks.push(point["task"]);
                     sums.push(point["duration"]);
                     counts.push(1);
                 }
@@ -111,14 +110,14 @@ class ComparisonChart extends Component {
             let counts = [];
             let means = [];
 
-            for(const point of relevantDataset) {
-                if(staff.includes(point["day"])) {
-                    sums[staff.indexOf(point["day"])] += point["duration"];
-                    counts[staff.indexOf(point["day"])]++;
+            for(const point of relevantData) {
+                if(days.includes(point["day"])) {
+                    sums[days.indexOf(point["day"])] += point["duration"];
+                    counts[days.indexOf(point["day"])]++;
                 }
                 else {
                     // first datapoint for a day, so start new entry in arrays
-                    staff.push(point["day"]);
+                    days.push(point["day"]);
                     sums.push(point["duration"]);
                     counts.push(1);
                 }
@@ -149,9 +148,11 @@ class ComparisonChart extends Component {
     }
 
     render() {
-        <div className="graphWindow" id={this.props.id}>
-            <Plot data={this.state.data} layout={this.state.layout}/>
-        </div>
+        return (
+            <div className="graphWindow" id={this.props.id}>
+                <Plot data={this.state.data} layout={this.state.layout}/>
+            </div>
+        );        
     }
 }
 
