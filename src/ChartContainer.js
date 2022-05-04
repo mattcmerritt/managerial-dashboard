@@ -23,14 +23,14 @@ class ChartContainer extends Component {
 
             const charts = [
                 <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Patient Process Flow Diagram" />,
-                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group}/>,
-                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group}/>,
-                <Chart chartType="pie" fields="wait" id="pie3" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group}/>,
+                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pie" fields="wait" id="pie3" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
             ];
     
             let parentChartDiv;
@@ -68,14 +68,14 @@ class ChartContainer extends Component {
 
             const charts = [
                 <GraphvizChart src={dot} engine={"dot"} viz={this.props.viz} data={this.props.group} title="Staff Process Flow Diagram" />,
-                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group}/>,
-                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group}/>,
-                <Chart chartType="pie" fields="travel" id="pie3" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group}/>,
-                <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group}/>,
+                <Chart chartType="pie" fields="categories" id="pie1" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pie" fields="care" id="pie2" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pie" fields="travel" id="pie3" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="steps" id="pillar1" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="stackedmeans" id="pillar2" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="stackedmeanpercents" id="pillar3" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="focusPillar" id="focuspillar" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
+                <Chart chartType="pillar" fields="focusStack" id="focusstack" source={this.props.group} datasetIndex={this.props.cumulative ? -3 : -1}/>,
             ];
     
             let parentChartDiv;
@@ -245,7 +245,7 @@ class ChartContainer extends Component {
         }
 
         let connections = ``;
-        if (nodeMessages.length == 0) {
+        if (nodeMessages.length === 0) {
             connections = `start -> end`;
         }
         else {

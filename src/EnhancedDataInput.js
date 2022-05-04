@@ -488,7 +488,7 @@ class EnhancedDataInput extends Component {
     // using the ChartContainer component, create and render all charts
     async PopulateCharts() {
         // creating the charts
-        const charts = <ChartContainer group={this.props.group} viz={this.props.viz} />;
+        const charts = <ChartContainer group={this.props.group} viz={this.props.viz} cumulative={false}/>;
         const inputSelectDiv = document.getElementById(this.props.group + "InputSelect");
         const emptyDiv = document.createElement("div");
         inputSelectDiv.appendChild(emptyDiv);
