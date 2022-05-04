@@ -22,6 +22,7 @@ class EnhancedDataInput extends Component {
         this.PopulateCharts = this.PopulateCharts.bind(this);
 
         this.ProcessComparisonData = this.ProcessComparisonData.bind(this);
+        this.FindUniqueFields = this.FindUniqueFields.bind(this);
     }
 
     componentDidMount() {
@@ -548,6 +549,34 @@ class EnhancedDataInput extends Component {
         return dataset;
     }
 
+    // reading in the dataset and grabbing each unique value for each field
+    // returns an object with an array of each value found for each field
+    async FindUniqueFields(dataset) {
+        if (dataset.length !== 0) {
+            // grabbing all the properties that each row has
+            const example = dataset[0];
+            const props = Object.keys(example);
+
+            // creating the object to contain the list of all values
+            const fields = {};
+            for (const prop of props) {
+                fields[prop] = [];
+            }
+            
+            // iterating through all the data points and finding unique values
+            for (const point of dataset) {
+                for (const prop of props) {
+                    const value = point[prop];
+                    if (!fields[prop].includes(value)) {
+                        fields[prop].push(value);
+                    }
+                }
+            }
+
+            return fields;
+        }
+    }
+
     async ProcessComparisonData(e) {
         // removing the form component once changed
         const form = document.getElementById(this.props.group + "DataInForm");
@@ -559,8 +588,12 @@ class EnhancedDataInput extends Component {
         // extracting the data from the workbook
         const initialDataset = await this.ExtractComparisonData(workbook);
 
-        // write dataset to session storage
+        // listing all unique values for each field
+        const uniqueValues = await this.FindUniqueFields(initialDataset);
+
+        // write dataset and values to session storage
         sessionStorage.setItem(this.props.group + "Dataset", JSON.stringify(initialDataset));
+        sessionStorage.setItem(this.props.group + "Values", JSON.stringify(uniqueValues));
 
         // creating recommendations and generating the charts
         this.PopulateCharts();
