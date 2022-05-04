@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import Plot from 'react-plotly.js';
 import ReactDOM from 'react-dom';
 
@@ -68,14 +69,80 @@ class ComparisonChart extends Component {
             layout.title = "Staff Performance on " + this.props.focus;
             layout.xaxis = {title: "Staff Member"};
             layout.yaxis = {title: "Mean Time (mins)"};
-
         }
         else if(this.props.fields === "dayfocus") {
+            let tasks = [];
+            let sums = [];
+            let counts = [];
+            let means = [];
 
+            for(const point of relevantDataset) {
+                if(staff.includes(point["task"])) {
+                    sums[staff.indexOf(point["task"])] += point["duration"];
+                    counts[staff.indexOf(point["task"])]++;
+                }
+                else {
+                    // first datapoint for a task, so start new entry in arrays
+                    staff.push(point["task"]);
+                    sums.push(point["duration"]);
+                    counts.push(1);
+                }
+            }
+
+            for(let i = 0; i < tasks.length; i++) {
+                means.push(sums[i] / counts[i]);
+            }
+
+            data.push({
+                type: 'bar',
+                x: tasks, 
+                y: means,
+                name: "Mean Performance (mins)"
+            });
+
+            layout.barmode = "group";
+            layout.title = "Staff Performance on " + this.props.focus;
+            layout.xaxis = {title: "Task"};
+            layout.yaxis = {title: "Mean Time (mins)"};
         }
         else if(this.props.fields === "persontask") {
+            let days = [];
+            let sums = [];
+            let counts = [];
+            let means = [];
 
+            for(const point of relevantDataset) {
+                if(staff.includes(point["day"])) {
+                    sums[staff.indexOf(point["day"])] += point["duration"];
+                    counts[staff.indexOf(point["day"])]++;
+                }
+                else {
+                    // first datapoint for a day, so start new entry in arrays
+                    staff.push(point["day"]);
+                    sums.push(point["duration"]);
+                    counts.push(1);
+                }
+            }
+
+            for(let i = 0; i < days.length; i++) {
+                means.push(sums[i] / counts[i]);
+            }
+
+            data.push({
+                type: 'bar',
+                x: days, 
+                y: means,
+                name: "Mean Performance (mins)"
+            });
+
+            layout.barmode = "group";
+            layout.title = "Daily Performance of " + this.props.focus + " on " + this.props.subfocus;
+            layout.xaxis = {title: "Day"};
+            layout.yaxis = {title: "Mean Time (mins)"};
         }
+
+        layout.height = 400;
+        layout.width = 500;
 
         this.setState({data: data, layout: layout});
 
