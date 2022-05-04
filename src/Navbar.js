@@ -5,7 +5,7 @@ class Navbar extends Component {
         super(props);
         this.state = {activeView: "patient", viewIndex: 0};
 
-        this.views = ["patient", "staff"];
+        this.views = ["patient", "staff", "staffCompare"];
 
         this.switchView = this.switchView.bind(this);
     }
@@ -33,14 +33,17 @@ class Navbar extends Component {
             else if (this.state.activeView === "staff") {
                 viewTitle = "Staff Data";
             }
+            else if (this.state.activeView === "staffCompare") {
+                viewTitle = "Staff Comparison";
+            }
             title.innerHTML = `Managerial Dashboard - ${viewTitle}`;
 
             // going though each view and enabling/disabling any elements found based on the active view
             for (const view of this.views) {
                 for (const componentName of componentNames) {
-                    const element = document.querySelector(componentNames.type + view + componentName.id);
+                    const element = document.querySelector(componentName.type + view + componentName.id);
                     if (element !== undefined && element !== null) {
-                        if (view === this.state.active) {
+                        if (view === this.state.activeView) {
                             element.style.display = componentName.style;
                         }
                         else {
