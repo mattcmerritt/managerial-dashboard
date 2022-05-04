@@ -63,7 +63,7 @@ This component is used by the following components:
 - `ChartContainer.js`
 
 ## ComparisonChart.js
-This component refers to the visualizations used in the Staff Comparison view.
+This component refers to the visualizations used in the Staff Comparison view. There are three different types of ComparisonCharts, which can be chosen by the `fields` value. ComparisonCharts with a `fields` value of "taskfocus" require a `focus` value of the task to focus on. ComparisonCharts with a `fields` value of "dayfocus" require a `focus` value of the day. ComparisonCharts with a `fields` value of "persontask" require a `focus` value of the staff member to focus on and a `subfocus` value of the task to focus on.
 
 This component is used by the following components:
 - `ChartContainer.js`
