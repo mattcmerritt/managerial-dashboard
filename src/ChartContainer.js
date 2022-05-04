@@ -108,6 +108,26 @@ class ChartContainer extends Component {
             const additionalData = <AdditionalDataInput group={this.props.group} viz={this.props.viz} />;
             ReactDOM.render(additionalData, temp2);
         }
+        else if (this.props.group === "staffCompare") {
+            const charts = [];
+    
+            // rendering the charts
+            let parentChartDiv;
+            const getParentChartDiv = new Promise((resolve, reject) => {
+                parentChartDiv = document.getElementById(this.props.group + "ChartsDiv");
+    
+                resolve();
+            });
+    
+            getParentChartDiv.then(() => {
+                for (let chart of charts) {
+                    let chartDiv = document.createElement("div");
+                    parentChartDiv.appendChild(chartDiv);
+        
+                    ReactDOM.render(chart, chartDiv);
+                }
+            });
+        }
     }
 
     // adds the specific recommendations for the each chart in the dataset

@@ -20,6 +20,8 @@ class EnhancedDataInput extends Component {
         this.ContinueProcess = this.ContinueProcess.bind(this);
         this.TerminateProcess = this.TerminateProcess.bind(this);
         this.PopulateCharts = this.PopulateCharts.bind(this);
+
+        this.ProcessComparisonData = this.ProcessComparisonData.bind(this);
     }
 
     componentDidMount() {
@@ -56,7 +58,7 @@ class EnhancedDataInput extends Component {
 
             // rest of the cells are values, so fetch and add to an array
             const dataArray = [];
-            for(let currRow = 1; currRow < range.e.r; currRow++) {
+            for(let currRow = 1; currRow <= range.e.r; currRow++) {
                 let dataCellAddress = colLetter + (currRow + 1);
                 let dataCell = worksheet[dataCellAddress];
                 let dataValue = (dataCell ? dataCell.v : undefined);
@@ -495,10 +497,79 @@ class EnhancedDataInput extends Component {
         ReactDOM.render(charts, emptyDiv);
     }
 
+    // ---------- The code below is the data loading process and chart ----------
+    // ----------     creation process for the staff comparison view   ----------
+
+    // reading in the contents of the file as an array of objects for each row
+    // returns a dataset
+    async ExtractComparisonData(workbook) {
+        let worksheet = workbook.Sheets[workbook.SheetNames[0]];    // first sheet in workbook
+        var range = this.XLSX.utils.decode_range(worksheet['!ref']);     // range of sheet
+
+        let colLetter = 'A';
+        const starterLetterValue = colLetter.charCodeAt(0);
+        let colLetterValue = starterLetterValue;
+        
+        const dataset = [];
+        const props = [];
+
+        // getting the property names from first row
+        for (let col = 0; col <= range.e.c; col++) {
+            const nameCell = worksheet[colLetter + 1];
+            const name = (nameCell ? nameCell.v : undefined);
+
+            props.push(name);
+
+            colLetterValue++;
+            colLetter = String.fromCharCode(colLetterValue);
+        }
+
+        // go through remaining rows and grab the items
+        for (let row = 1; row <= range.e.r; row++) {
+            // reset column label
+            colLetterValue = starterLetterValue;
+            colLetter = String.fromCharCode(colLetterValue);
+
+            // create data point
+            const dataPoint = {};
+            for (let col = 0; col <= range.e.c; col++) {
+                const cellAddress = colLetter + (row + 1);
+                const cell = worksheet[cellAddress];
+                const value = (cell ? cell.v : undefined);
+
+                dataPoint[props[col]] = value;
+
+                colLetterValue++;
+                colLetter = String.fromCharCode(colLetterValue);
+            }
+            dataset.push(dataPoint);
+        }
+
+        return dataset;
+    }
+
+    async ProcessComparisonData(e) {
+        // removing the form component once changed
+        const form = document.getElementById(this.props.group + "DataInForm");
+        form.remove();
+
+        // starting the process by loading the file to a workbook
+        const workbook = await this.LoadFile(e);
+
+        // extracting the data from the workbook
+        const initialDataset = await this.ExtractComparisonData(workbook);
+
+        // write dataset to session storage
+        sessionStorage.setItem(this.props.group + "Dataset", JSON.stringify(initialDataset));
+
+        // creating recommendations and generating the charts
+        this.PopulateCharts();
+    }
+
     render() {
         return (
             <div className={this.props.group + "DataIn"} style={this.props.enabled ? {display : "block"} : {display: "none"}}>
-                <input type="file" id={this.props.group + "DataInForm"} onChange={this.ProcessDataset}></input>
+                <input type="file" id={this.props.group + "DataInForm"} onChange={this.props.group !== "staffCompare" ? this.ProcessDataset : this.ProcessComparisonData}></input>
                 <div className={this.props.group + "DataInSettings"} id={this.props.group + "DataInSettings"} style={{display: "none"}}>
                     <p id={this.props.group + "InputInstructions"}></p>
                 </div>
