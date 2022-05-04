@@ -49,3 +49,6 @@ For the expert recommendations and exported datasets, these files are generated 
 - File contents are formatted in JSON
 
 Example datasets are contained in this repository under the `files` directory. They are named after which view they should be loaded into. Additionally, there is an example of an exported dataset in `patientDataset.txt` file, and there is an example of an expert recommendation file in `Expert_Recommendations.txt`.
+
+## Code
+A summary of the React components involved in making the app can be found in the `README.md` file located in the `src` directory.
