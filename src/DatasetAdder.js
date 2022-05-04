@@ -105,7 +105,7 @@ class DatasetAdder extends Component {
             sessionStorage.setItem(this.group + "Dataset", JSON.stringify(newDataset));
 
             // creating the charts for the newest dataset
-            const charts = <ChartContainer group={this.group} viz={this.viz} />;
+            const charts = <ChartContainer group={this.group} viz={this.viz} cumulative={true}/>;
             const additionalDataDiv = document.getElementsByClassName(this.group + "AdditionalData")[0];
             const emptyDiv = document.createElement("div");
             additionalDataDiv.appendChild(emptyDiv);

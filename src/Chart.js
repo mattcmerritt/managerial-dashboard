@@ -14,7 +14,35 @@ const Chart = (props) => {
 
     // read in data from excel
     let processedData;
-    if (props.datasetIndex === undefined || props.datasetIndex === -1) {
+    if (props.datasetIndex === -3) { // cumulative of all weeks
+        const datasets = JSON.parse(sessionStorage.getItem(props.source + "Datasets"));
+        processedData = datasets[0];
+
+        for(let i = 1; i < datasets.length; i++) {
+            const additionalData = datasets[i];
+            for(let j = 0; j < additionalData.length; j++) {
+                for(const point of additionalData[j].data) {
+                    processedData[j].data.push(point);
+                }
+            }
+        }
+        console.log(processedData);
+    }
+    else if (props.datasetIndex === -2) { // cumulative of all weeks less current
+        const datasets = JSON.parse(sessionStorage.getItem(props.source + "Datasets"));
+        processedData = datasets[0];
+
+        for(let i = 1; i < datasets.length - 1; i++) {
+            const additionalData = datasets[i];
+            for(let j = 0; j < additionalData.length; j++) {
+                for(const point of additionalData[j].data) {
+                    processedData[j].data.push(point);
+                }
+            }
+        }
+        console.log(processedData);
+    }
+    else if (props.datasetIndex === undefined || props.datasetIndex === -1) {
         processedData = JSON.parse(sessionStorage.getItem(props.source + "Dataset")); // use the current dataset
     }
     else {
@@ -171,7 +199,7 @@ const Chart = (props) => {
 
         // customize layout for pie charts
         layout.height = 400;
-        layout.width = 500;
+        layout.width = props.noButtons ? 350 : 500;
 
     }
     else if (props.chartType === "pillar") {
@@ -416,7 +444,7 @@ const Chart = (props) => {
 
         // customize layout for pillar charts
         layout.height = 400;
-        layout.width = 500;
+        layout.width = props.noButtons ? 350 : 500;
     }
     
     const CreateModal = (title, content) => {
@@ -453,6 +481,7 @@ const Chart = (props) => {
                 onClick={() => {
                     const plot = [
                         <Chart chartType={props.chartType} fields={props.fields} id={props.id} source={props.source} datasetIndex={0} noButtons={true}/>,
+                        <Chart chartType={props.chartType} fields={props.fields} id={props.id} source={props.source} datasetIndex={-2} noButtons={true}/>,
                         <Chart chartType={props.chartType} fields={props.fields} id={props.id} source={props.source} datasetIndex={-1} noButtons={true}/>,
                     ];
     
@@ -525,6 +554,12 @@ const Chart = (props) => {
     if(props.noButtons) {
         if(props.datasetIndex === -1) {
             layout.title = "Recent " + layout.title;
+        }
+        else if(props.datasetIndex === -2) {
+            layout.title = "Previous " + layout.title;
+        }
+        else if(props.datasetIndex === -3) {
+            layout.title = "Cumulative " + layout.title;
         }
         else {
             layout.title = "Initial " + layout.title;
